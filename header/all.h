@@ -1,2 +1,6 @@
-#include "codingGameServer.h"
-#include "ticketToRide.h"
+#include "../tickettorideapi/ticketToRide.h"
+#include "choice.h"
+#include "struct.h"
+#include "debugfunc.h"
+#include "define.h"
+#include "gestiondata.h"
