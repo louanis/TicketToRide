@@ -17,11 +17,11 @@ int main(){
     printf("-----");
     
     actionResult = printBoard();
+    printf("%d",actionResult);
 
     print_board_data(Gdat);
 
-    is_all_good(actionResult);
-
+    // printf("------");
     t_matrix_board * gamestate = init_matrix_board(Gdat);
     free_matrix_board(gamestate);
 

@@ -3,7 +3,6 @@
 #include "../header/all.h"
 
 t_matrix_board * init_matrix_board(GameData data){
-
     t_matrix_board * return_matrix = (t_matrix_board*) malloc(sizeof(t_matrix_board));
     return_matrix -> matrixTrackLength = (t_matrix*) malloc(sizeof(t_matrix));
     return_matrix -> matrixTrackOwner = (t_matrix*) malloc(sizeof(t_matrix));
@@ -20,18 +19,17 @@ t_matrix_board * init_matrix_board(GameData data){
     return_matrix -> matrixTrackOwner -> M = (int**) malloc(data.nbCities*sizeof(int *));
     return_matrix -> matrixTrackCol1 -> M = (int**) malloc(data.nbCities*sizeof(int *));
     return_matrix -> matrixTrackCol2 -> M = (int**) malloc(data.nbCities*sizeof(int *));
-
-    for(int iL ; iL < data.nbCities; iL++){
+    for(int iL = 0; iL < data.nbCities; iL++){
         return_matrix -> matrixTrackLength -> M[iL] = (int*) malloc(data.nbCities*sizeof(int));
     }
-    for(int iO ; iO < data.nbCities; iO++){
-        return_matrix -> matrixTrackLength -> M[iO] = (int*) malloc(data.nbCities*sizeof(int));
+    for(int iO = 0; iO < data.nbCities; iO++){
+        return_matrix -> matrixTrackOwner -> M[iO] = (int*) malloc(data.nbCities*sizeof(int));
     }
-    for(int iC1 ; iC1 < data.nbCities; iC1++){
-        return_matrix -> matrixTrackLength -> M[iC1] = (int*) malloc(data.nbCities*sizeof(int));
+    for(int iC1 = 0; iC1 < data.nbCities; iC1++){
+        return_matrix -> matrixTrackCol1 -> M[iC1] = (int*) malloc(data.nbCities*sizeof(int));
     }
-    for(int iC2 ; iC2 < data.nbCities; iC2++){
-        return_matrix -> matrixTrackLength -> M[iC2] = (int*) malloc(data.nbCities*sizeof(int));
+    for(int iC2 = 0; iC2 < data.nbCities; iC2++){
+        return_matrix -> matrixTrackCol2 -> M[iC2] = (int*) malloc(data.nbCities*sizeof(int));
     }
 
     for(int i = 0; i<data.nbCities; i++){
@@ -39,10 +37,10 @@ t_matrix_board * init_matrix_board(GameData data){
             return_matrix -> matrixTrackLength -> M[i][j] = -1;
         }
     }
-
+    
     for(int i = 0; i<data.nbCities; i++){
         for(int j = 0; j<data.nbCities; j++){
-            return_matrix -> matrixTrackOwner -> M[i][j] = -1;
+            return_matrix -> matrixTrackOwner -> M[i][j] = 0;
         }
     }
 
@@ -62,6 +60,11 @@ t_matrix_board * init_matrix_board(GameData data){
     for(int i = 0; i<data.nbTracks*5; i+=5){
         int mincit = MIN(data.trackData[i+0],data.trackData[i+1]);
         int maxcit = MAX(data.trackData[i+0],data.trackData[i+1]);
+        return_matrix -> matrixTrackLength -> M[maxcit][mincit] = data.trackData[i+2];
+        return_matrix -> matrixTrackCol1 -> M[maxcit][mincit] = data.trackData[i+3];
+        return_matrix -> matrixTrackCol2 -> M[maxcit][mincit] = data.trackData[i+4];
+
+
         return_matrix -> matrixTrackLength -> M[mincit][maxcit] = data.trackData[i+2];
         return_matrix -> matrixTrackCol1 -> M[mincit][maxcit] = data.trackData[i+3];
         return_matrix -> matrixTrackCol2 -> M[mincit][maxcit] = data.trackData[i+4];
