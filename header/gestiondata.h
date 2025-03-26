@@ -2,8 +2,8 @@
 #define GESTIONDATA_H
 #include "struct.h"
 
-t_matrix_board * init_matrix_board(GameData data);
-void free_matrix_board(t_matrix_board * matrix);
+t_matrix_track * init_matrix_track(GameData data);
+void free_matrix_track(t_matrix_track * matrix);
 
 
 #endif

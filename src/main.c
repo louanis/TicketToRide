@@ -22,8 +22,8 @@ int main(){
     print_board_data(Gdat);
 
     // printf("------");
-    t_matrix_board * gamestate = init_matrix_board(Gdat);
-    free_matrix_board(gamestate);
+    t_matrix_track * gamestate = init_matrix_track(Gdat);
+    free_matrix_track(gamestate);
 
     actionResult = quitGame();
     return 0;
