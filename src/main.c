@@ -23,6 +23,9 @@ int main(){
 
     // printf("------");
     t_matrix_track * gamestate = init_matrix_track(Gdat);
+
+    t_game_info * gameinfo = (t_game_info*)malloc(sizeof(t_game_info));
+    manual_loop(gameinfo,0,1,&Gdat);
     free_matrix_track(gamestate);
 
     actionResult = quitGame();

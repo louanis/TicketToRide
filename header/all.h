@@ -6,3 +6,4 @@
 #include "gestiondata.h"
 #include "manual.h"
 #include "algo.h"
+#include "machine_detat.h"

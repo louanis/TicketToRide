@@ -44,7 +44,7 @@ t_matrix_track * init_matrix_track(GameData data){
 void free_matrix_track(t_matrix_track * matrix){
 
 
-    for(int i = 0; i<matrix->size; i++){int tabCards[10];
+    for(int i = 0; i<matrix->size; i++){
         free(matrix -> M[i]);
     }
     

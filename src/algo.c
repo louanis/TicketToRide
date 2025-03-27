@@ -16,8 +16,11 @@ int  track_value(t_matrix_track * matrix, t_dijktra_output * best_path){
 void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2, int (*track_value_dijktra)(const void *, int)){
     int * track_value_arr = (int*) malloc(matrix->nbTrack * sizeof(int));
     int * is_in_path = (int*) malloc(matrix->nbTrack*sizeof(int)); //0 no 1 yes
-    t_track ** tracks;
-    void construct_track_list(matrix, tracks);
+
+    t_track * tracks;
+    construct_track_list(matrix, &tracks);
+
+
     t_track * track_from = (t_track*) malloc(matrix->nbTrack*sizeof(t_track));
     track_from[1] = matrix->nullTrack;
 

@@ -1,6 +1,17 @@
 #ifndef STRUCT_H
 #define STRUCT_H
+#include "../tickettorideapi/ticketToRide.h"
 
+
+typedef int t_state;
+/*
+* My turn = 0
+* Opp turn = 1
+* I choose objectives = 2
+* Opp chooses objectives = 3
+* I drawed a non visible loc card = 4
+* Opp drawed a non visible loc card = 5
+*/
 
 typedef struct t_matrix_{
     int ** M;
@@ -26,13 +37,6 @@ typedef struct t_matrix_track_{
     int nbTrack;
 }t_matrix_track;
 
-typedef struct t_game_info_{
-    int playerTurn;
-    int myNumber;
-    CardColor visibleCards[5];
-    t_matrix_track * board;
-    t_player * tabPlayer;
-}t_game_info;
 
 typedef struct t_objective_{
     int cit1;
@@ -47,6 +51,16 @@ typedef struct t_player_{
     int nbObjectives;
     t_objective * tabObjectives;
 }t_player;
+
+typedef struct t_game_info_{
+    int playerTurn;
+    int myNumber;
+    CardColor visibleCards[5];
+    //t_matrix_track * board;
+    //t_player * tabPlayer;
+}t_game_info;
+
+
 
 // typedef struct t_matrix_board_{
 //     t_matrix * matrixTrackLength;
