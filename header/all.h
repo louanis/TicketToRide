@@ -4,3 +4,5 @@
 #include "debugfunc.h"
 #include "define.h"
 #include "gestiondata.h"
+#include "manual.h"
+#include "algo.h"

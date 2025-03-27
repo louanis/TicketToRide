@@ -23,8 +23,30 @@ typedef struct t_matrix_track_{
     t_track ** M;
     t_track nullTrack;
     int size;
+    int nbTrack;
 }t_matrix_track;
 
+typedef struct t_game_info_{
+    int playerTurn;
+    int myNumber;
+    CardColor visibleCards[5];
+    t_matrix_track * board;
+    t_player * tabPlayer;
+}t_game_info;
+
+typedef struct t_objective_{
+    int cit1;
+    int cit2;
+    int points;
+}t_objective;
+
+typedef struct t_player_{
+    int nbCars;
+    int nbCards;
+    int * tabCards;
+    int nbObjectives;
+    t_objective * tabObjectives;
+}t_player;
 
 // typedef struct t_matrix_board_{
 //     t_matrix * matrixTrackLength;
