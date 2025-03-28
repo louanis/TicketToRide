@@ -6,10 +6,13 @@
 #define ADDR_SERVER "cgs.valentin-lelievre.com"
 
 int main(){
+    extern int DEBUG_LEVEL;
+    DEBUG_LEVEL = INTERN_DEBUG;
+
     ResultCode actionResult;
     actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER);
 
-    actionResult = sendName("QuoicouKING");
+    actionResult = sendName("QuoicouKNIGHT");
     
     GameSettings Gset = GameSettingsDefaults;
     GameData Gdat = GameDataDefaults;

@@ -7,8 +7,8 @@ typedef int t_state;
 /*
 * My turn = 0
 * Opp turn = 1
-* I choose objectives = 2
-* Opp chooses objectives = 3
+* I draw objectives = 2
+* Opp draw objectives = 3
 * I drawed a non visible loc card = 4
 * Opp drawed a non visible loc card = 5
 */
@@ -56,7 +56,7 @@ typedef struct t_game_info_{
     int playerTurn;
     int myNumber;
     CardColor visibleCards[5];
-    //t_matrix_track * board;
+    t_matrix_track * board;
     //t_player * tabPlayer;
 }t_game_info;
 
