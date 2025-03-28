@@ -2,6 +2,34 @@
 #include <stdlib.h>
 #include "../header/all.h"
 
+
+unsigned int is_in(int a, int * b, int size){
+    for(int i = 0;i<size;i++){
+        if(a==b[i]){
+            return 1;
+        } 
+    } 
+    return 0;
+} 
+
+/*
+* Return ==0 problems, else no problems
+* convert a t_track into an already malloced ClaimRouteMove
+*/
+int track_to_claimRouteMove(ClaimRouteMove * claim_route, t_game_info * game_info, int color, int cit1, int cit2){
+    t_track track = game_info->board->M[MAX(cit1,cit2)][MIN(cit1,cit2)];  
+    claim_route->from = MAX(cit1,cit2);
+    claim_route->to = MIN(cit1,cit2);
+    if(color == 1){
+        claim_route->color = track.col1;
+    }else{
+        claim_route->color = track.col2;
+    } 
+    claim_route->nbLocomotives = MAX(0,(track.length));
+    return MAX(claim_route->nbLocomotives,0); 
+
+} 
+
 /*--------------------------TRACKS MATRIX--------------------------*/
 
 t_matrix_track * init_matrix_track(GameData data){
