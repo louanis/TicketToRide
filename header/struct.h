@@ -53,11 +53,12 @@ typedef struct t_player_{
 }t_player;
 
 typedef struct t_game_info_{
-    int playerTurn;
+    int playerTurn; //1 me 2 op
     int myNumber;
-    CardColor visibleCards[5];
+    BoardState visibleCards;
+    CardColor myCards[9];
     t_matrix_track * board;
-    //t_player * tabPlayer;
+    GameData * gData;
 }t_game_info;
 
 

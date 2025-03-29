@@ -26,11 +26,32 @@ int main(){
 
     // printf("------");
     t_matrix_track * gamestate = init_matrix_track(Gdat);
+    BoardState EtatPlateau;
+    getBoardState(&EtatPlateau);
+    MoveResult mresult;
 
-    t_game_info * gameinfo = (t_game_info*)malloc(sizeof(t_game_info));
-    manual_loop(gameinfo,0,1,&Gdat);
-    free_matrix_track(gamestate);
+    /*
+    //--------------------------------------------------------
+    t_game_info * gameInfo = (t_game_info *)malloc(sizeof(t_game_info));
+    gameInfo->gData = &Gdat;
+    gameInfo->board = gamestate;
+    gameInfo->myNumber = 1;
+    for(int i = 0;i<9;i++){
+        gameInfo->myCards[i] = 0;
+    } 
+    for(int i = 0;i<4;i++){
+        gameInfo->myCards[Gdat.cards[i]]++; 
+    }
+    getBoardState(&gameInfo->visibleCards);
+    //--------------------------------------------------------
 
+    manual_loop(gameInfo);
+    
     actionResult = quitGame();
+
+    */
+    free_matrix_track(gamestate);
+    printf("Starter %d\n",Gdat.starter);
+    JouerSolo(1, mresult ,EtatPlateau);
     return 0;
 }

@@ -21,3 +21,50 @@ void print_board_data(GameData data){
     return;
 
 }
+
+void AfficherEtatPlateau(BoardState * EtatPlateau){
+    printf("cartes visibles : ");
+    for(int i = 0;i<5;i++){
+        printf("%d ",EtatPlateau->card[i]);
+    } 
+    printf("\n");
+    return;
+} 
+
+void AfficherAction(MoveData * moveData){
+    switch((int)moveData->action){
+        case 1:
+            printf("Route Claim : ");
+            printf("from : %d, to : %d, couleur : %d, longueur : %d",moveData->claimRoute.from,moveData->claimRoute.to,(int)moveData->claimRoute.color,moveData->claimRoute.nbLocomotives);
+        break;
+
+        case 2:
+            printf("blind card was drawn");
+        break;
+
+        case 3:
+            printf("The drawn card has the color %d",(int)moveData->drawCard);
+        break;
+
+        case 4:
+            printf("Objectives have been drawn");
+        break;
+
+        case 5:
+            printf("Objectives have been choosen");
+        break;
+
+        default:
+        break;
+    } 
+
+} 
+
+void AfficherObjectif(MoveResult * mresult){
+    printf("objectifs : ");
+    for(int i = 0;i<5;i++){
+        printf("(from %d to %d score %d)",mresult->objectives[i].from,mresult->objectives[i].to,mresult->objectives[i].score);
+    } 
+    printf("\n");
+    return;
+}  

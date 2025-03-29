@@ -2,4 +2,4 @@
 *.exe
 *.out
 main
-.vscode
+./.vscode

@@ -5,4 +5,9 @@
 void print_board_data(GameData data);
 void is_all_good(ResultCode actionResult);
 
+void AfficherEtatPlateau(BoardState * EtatPlateau);
+void AfficherAction(MoveData * moveData);
+void AfficherObjectif(MoveResult * mresult);
+
+
 #endif
