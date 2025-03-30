@@ -1,196 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../header/all.h"
-//#define VERSION_1
+#define VERSION_1
 
 
 #ifdef VERSION_1
 
 
 void manual_loop(t_game_info * game_info){
-    
-	MoveData * move = (MoveData*)malloc(sizeof(MoveData));
-	MoveData * move2 = (MoveData*)malloc(sizeof(MoveData));
 
-    MoveResult move_result;
-    move_result.state = 0x1;
-    ResultCode result_code;
-	int replay=1;
+	MoveData * oppMove = (MoveData*)malloc(sizeof(MoveData));
+	MoveData * myMove = (MoveData*)malloc(sizeof(MoveData));
+	MoveResult moveResult;
 
+	int buffer[20]; // storing all input in the same array in an organized way to prevent pletorade of variables
 
-	int ScanAction = 0;
-	int ScanAction2 = 0;	
+	int replay = 0; // 0 if first move played since last turn switch, 1 if second move in a row 
 
-	while(move_result.state == 0x1){
-		printBoard();
-		//roadToPlace = algo_one_road( YOU->TabOfObjetive[0], generalInfo);
+	while(1){ 
+		if(game_info->playerTurn == 1){
+			printf("Move ? : ");
+			scanf("%d",&buffer[0]);
+			printf("\n");
 
-		//int test = chooseColor(YOU->TabOfObjetive[0], generalInfo, YOU);
+			switch(buffer[0]){
+				/*Still need to fill in the cases*/
+				case 1:
 
-		if (game_info->playerTurn==0)
-		{
-			printf("Decrire action\n" );
-
-			printf("1 pour claimRoute; 2 pour drawBlindCard; 3 pour drawCard; 4 pour chooseObjectives\n" );
-			scanf("%d",&ScanAction);
-			
-			if (ScanAction==1)		//claim road
-			{
-				move->action=1;
-				printf("Nom ville depart:\n");		//choose your move
-				scanf("%d",(int*)&move->claimRoute.from);
-				printf("Nom ville arrive:\n");
-				scanf("%d",(int*)&move->claimRoute.to);
-				printf("couleur:\n");
-				scanf("%d",(int*)&move->claimRoute.color);
-				printf("Nonbre multicolor:\n");
-				scanf("%d",(int*)&move->claimRoute.nbLocomotives);
-
-				result_code = playTheMove(move);
-				filClaimRoad(generalInfo,move,YOU);
-			}
-
-			if (ScanAction==3)		//draw card
-			{
-				move->action=3;
-				printf("couleur de la carte voulu:\n");		//choose your color
-				scanf("%d",&move->drawCard.card);
-				result_code = playTheMove(move);
-				filCard(move,YOU,generalInfo);
-
-				if (move->drawCard.card!=9)		//cant replay if multicolor
-				{
-					printf("Decrire action\n" );
-					printf("1 pour drawCard; 2 pour drawBlindCard\n" );
-					scanf("%d",&ScanAction2);
-
-					if(ScanAction2==1)
-					{
-						printf("couleur de la carte voulu:\n");		//choose your color
-						scanf("%d",&move->drawCard.card);
-						result_code = playTheMove(move);
-						filCard(move,YOU,generalInfo);				//fil your cards with what you draw
-					}
-					else
-					{
-						move->action=2;								//draw blind 
-						result_code = playTheMove(move);
-						filBlindCard(generalInfo,move,YOU);						//fil your cards with what you drawblinb
-					}
-				}
-			}
-
-			if (ScanAction==2)		//draw blind card
-			{
-				move->action=2;
-				result_code = playTheMove(move);		//next what did u do?
-				filBlindCard(generalInfo,move,YOU);						// fil your cards with what you drawblind
-
-				printf("Decrire action\n" );
-				printf("1 pour drawCard; 2 pour drawBlindCard\n" );
-				scanf("%d",&ScanAction2);
-				if(ScanAction2==1)
-				{
-					move->action=3;
-					printf("couleur de la carte voulu:\n");		//choose your color
-					scanf("%d",&move->drawCard.card);
-					result_code = playTheMove(move);
-					filCard(move,YOU,generalInfo);				//fil your cards with what you draw
-				}
-				else
-				{
-					result_code = playTheMove(move);		//draw blind 
-					filBlindCard(generalInfo,move,YOU);						//fil your cards with what you drawblinb
-				}
-			}
-
-			if (ScanAction==4)		//take ojective
-			{
-				move->action=4;
-				result_code = playTheMove(move);
-
-				for (int i = 0; i < 3; ++i)
-				{
-					printf("objectif:%d ville:%d a ville:%d valeur:%d \n",i,move->chooseObjectives[i].from,
-																			move->chooseObjectives[i].to,
-																			move->chooseObjectives[i].score);
-				}
-
-				move2->action=5;		//chose objective
-				printf("choisir 1 valider 0 jeter pour chaque objectifs\n");
-				scanf("%d",(int*)&move2->chooseObjectives[0]);
-				scanf("%d",(int*)&move2->chooseObjectives[1]);
-				scanf("%d",(int*)&move2->chooseObjectives[2]);
-
-				result_code = playTheMove(move2);
-				printf("Vous avez pris %d objectifs\n",move2->chooseObjectives.nbObjectives );
-
-				filOjective(generalInfo,move,move2,YOU);	//fil you with the objeective
-
-			}
-			if (ScanAction==5)
-			{
 				break;
-			}
 
-			game_info->playerTurn=1;	
-		}
+				case 2:
+				break;
 
-		else {
-			if (game_info->playerTurn==1)
-			{
-				printf("tour ENNEMIE\n");
-				// t_return_code getMove(t_move* move, int* replay);
-				result_code = getMove(move,&replay);
-				lookMove(move);
-				if (move->action==1)
-				{
-					filClaimRoad(generalInfo,move,ENNEMIE);
-				}
-				if (move->action==2)
-				{
-					filBlindCard(generalInfo,move,ENNEMIE);
-				}
-				if (move->action==3)
-				{
-					filCard(move,ENNEMIE,generalInfo);	
-				}
-				if (move->action==4)
-				{
-					replay=1;	//take objectiv
-				}
+				case 3:
+				break;
 
-		
-				if(replay)
-					result_code = getMove(move2,&replay);
+				case 4:
+				break;
 
-				game_info->playerTurn=0;
-				lookMove(move2);
-				if (move2->action==1)
-				{
-					filClaimRoad(generalInfo,move2,ENNEMIE);
-				}
-				if (move2->action==2)
-				{
-					filBlindCard(generalInfo,move2,ENNEMIE);
-				}
-				if (move2->action==3)
-				{
-					filCard(move2,ENNEMIE,generalInfo);	
-				}
-				if (move2->action==5)
-				{
-					filOjective(generalInfo,move,move2,ENNEMIE);;
-				}
-			}
-		}
-	}
-	free(move);
-	free(move2);
+				default: //5
+				break;
+			} 
 
-    printf("%d",(int)result_code);
-    return;
+			sendMove(myMove,&moveResult);
+		}else if(game_info->playerTurn == 2){
+			getMove(oppMove,&moveResult);
+			free(moveResult.message);
+			free(moveResult.opponentMessage);
 
+			if((int)oppMove->action == 2 || (int)oppMove->action == 4 ){ //%2 == 0
+
+				switch(replay){
+					case 0:
+						game_info->playerTurn = 2;
+						replay = 1;
+					break;
+
+					case 1:
+						game_info->playerTurn = 1;
+						replay = 0;
+					break;
+
+					default:
+					break;
+				} 
+
+			} else if ((int)oppMove->action == 3){ // if in another if to prevent wrongful acess of 
+				if( (int)oppMove->drawCard == 9){
+					game_info->playerTurn = 2;
+
+				} else{
+					game_info->playerTurn = 1;
+
+				} 
+			}  else{
+				game_info->playerTurn = 1;
+			} 
+		} 
+	} 
+    
 }
 
 int play_move_authorize(MoveData * move,t_game_info * game_info){

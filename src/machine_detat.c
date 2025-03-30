@@ -11,7 +11,7 @@ int machine_detat(t_state * state, MoveData * move_data,MoveResult * move_result
                 if(move_data->drawCard == 9){
                     *state = 1;
                 }else{
-                    if(is_in((int)move_data->drawCard,(int*)info->visibleCards,5)){
+                    if( is_in((int)move_data->drawCard,(int*)info->visibleCards,5) ){
                         *state = 4;
                     }else{
                         return 0;
