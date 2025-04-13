@@ -10,7 +10,7 @@ int main(){
     DEBUG_LEVEL = INTERN_DEBUG;
 
     ResultCode actionResult;
-    actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouPNJ");
+    actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
 
     
     GameData Gdat;

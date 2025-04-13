@@ -3,6 +3,9 @@
 #include "../header/all.h"
 
 int chose_move(t_game_info * game_info){
+    
+
+
     return 2;
 }
 

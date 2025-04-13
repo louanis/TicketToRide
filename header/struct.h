@@ -57,6 +57,7 @@ typedef struct t_game_info_{
     int playerReplay;
     int myNumber;
     BoardState visibleCards;
+    t_track bestTracks[10];
     CardColor myCards[9];
     t_matrix_track * board;
     GameData * gData;
