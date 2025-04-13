@@ -8,3 +8,4 @@
 #include "manual.h"
 #include "algo.h"
 #include "auto.h"
+#include "uint.h" 

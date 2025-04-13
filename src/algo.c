@@ -3,14 +3,54 @@
 #include "../header/all.h"
 
 /*Gives us the value for 1 track targeted to the building of the dijktra*/
-int track_value_dijktra(const void * e1, int mode){
+uint32 track_value_dijktra(const void * e1, int mode){
     return ((t_track*) e1) -> length;
 }
 
 /*Gives us the total track value after considering the dijktra*/
-int  track_value(t_matrix_track * matrix, t_dijktra_output * best_path){
+uint32 track_value(t_matrix_track * matrix, t_dijktra_output * best_path){
     return 1;
 }
+
+uint32 score(int length){
+    switch(length){
+        case 1:
+        return 1;
+
+        case 2:
+        return 2;
+
+        case 3:
+        return 4;
+
+        case 4:
+        return 7;
+
+        case 5:
+        return 10;
+
+        default:
+        return 15;
+    } 
+} 
+
+uint32 cost_track(t_game_info * game_info, t_track * track, int dist_from_start){
+    /*The assignations of the value variable in comments is for me to keep up to what i have in mind before forgeting it, so not pay to much attention to it*/
+
+    uint32 cost = ((uint32) -1)/2 + dist_from_start * WEIGHT_TRACK_DISTANCE_FROM_START;
+    // uint32 value = ((uint32) -1)/2 - dist_from_start * WEIGHT_TRACK_DISTANCE_FROM_START;
+    // value += WEIGHT_TRACK_LENGTH * score(track->length);
+    cost -= WEIGHT_TRACK_LENGTH * score(track->length);
+    if(track->length-game_info->myCards[track->col1] < track->length-game_info->myCards[track->col2]){
+        cost += track->length-game_info->myCards[track->col1]; 
+        // value -= track->length-game_info->myCards[track->col1]; 
+    } else{
+        cost += track->length-game_info->myCards[track->col2]; 
+        // value -= track->length-game_info->myCards[track->col2]; 
+    } 
+
+
+} 
 
 /*Dijktra*/
 void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2, int (*track_value_dijktra)(const void *, int)){

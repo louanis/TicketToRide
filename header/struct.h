@@ -58,7 +58,7 @@ typedef struct t_game_info_{
     int myNumber;
     BoardState visibleCards;
     t_track bestTracks[10];
-    CardColor myCards[9];
+    int myCards[10]; //The cards will be set to 0 and the 0th element will stay 0 forever to not burden myself with verification of color index later on
     t_matrix_track * board;
     GameData * gData;
 }t_game_info;
