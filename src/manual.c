@@ -9,13 +9,14 @@
 
 void manual_loop(t_game_info * game_info){
 
-	MoveData * oppMove = (MoveData*)malloc(sizeof(MoveData));
-	MoveData * myMove = (MoveData*)malloc(sizeof(MoveData));
+	MoveData oppMove;
+	MoveData myMove;
 	MoveResult moveResult;
 
 	int buffer[20]; // storing all input in the same array in an organized way to prevent pletorade of variables
 
 	int replay = 0; // 0 if first move played since last turn switch, 1 if second move in a row 
+    int legal = 1; // 1 if the move i am going to play is legal, else 0
 
 	while(1){ 
 		if(game_info->playerTurn == 1){
@@ -26,10 +27,14 @@ void manual_loop(t_game_info * game_info){
 			switch(buffer[0]){
 				/*Still need to fill in the cases*/
 				case 1:
+                    if(replay == 0) {
+                        
+                    }
 
 				break;
 
 				case 2:
+                    myMove.action = 2;
 				break;
 
 				case 3:
@@ -41,14 +46,18 @@ void manual_loop(t_game_info * game_info){
 				default: //5
 				break;
 			} 
+            if(legal == 1) {
+			    sendMove(&myMove,&moveResult);
 
-			sendMove(myMove,&moveResult);
+            }
+
+
 		}else if(game_info->playerTurn == 2){
-			getMove(oppMove,&moveResult);
+			getMove(&oppMove,&moveResult);
 			free(moveResult.message);
 			free(moveResult.opponentMessage);
 
-			if((int)oppMove->action == 2 || (int)oppMove->action == 4 ){ //%2 == 0
+			if((int)oppMove.action == 2 || (int)oppMove.action == 4 ){ //%2 == 0
 
 				switch(replay){
 					case 0:
@@ -65,8 +74,8 @@ void manual_loop(t_game_info * game_info){
 					break;
 				} 
 
-			} else if ((int)oppMove->action == 3){ // if in another if to prevent wrongful acess of 
-				if( (int)oppMove->drawCard == 9){
+			} else if ((int)oppMove.action == 3){ // if in another if to prevent wrongful acess of 
+				if( (int)oppMove.drawCard == 9){
 					game_info->playerTurn = 2;
 
 				} else{

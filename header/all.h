@@ -1,4 +1,5 @@
 #include "../tickettorideapi/ticketToRide.h"
+#include "../tickettorideapi/clientAPI.h"
 #include "choice.h"
 #include "struct.h"
 #include "debugfunc.h"
@@ -6,4 +7,4 @@
 #include "gestiondata.h"
 #include "manual.h"
 #include "algo.h"
-#include "machine_detat.h"
+#include "auto.h"

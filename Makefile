@@ -1,13 +1,21 @@
-SRC= src/choice.c src/debugfunc.c src/gestiondata.c src/main.c src/machine_detat.c src/move.c src/algo.c src/manual.c tickettorideapi/ticketToRide.c tickettorideapi/codingGameServer.c
+FILE = choice.c debugfunc.c gestiondata.c main.c move.c algo.c auto.c
+FILEAPI = ticketToRide.c clientAPI.c
+SRCDIR = src/
+APIDIR = tickettorideapi/
+SRC = $(addprefix $(SRCDIR),$(FILE)) $(addprefix $(APIDIR),$(FILEAPI))
 
 OBJ= $(SRC:.c=.o)
 
 main : $(OBJ)
-	gcc -o $@ $^ 
+	gcc -g -o $@ $^ 
 
 %.o : %.c
-	gcc -Wall -Werror -c -o $@ $^
+	gcc -Wall -Werror -g -c -o $@ $^
 
 .PHONY : clean
 clean : 
+	echo $(FILE)
+	echo $(SRC)
+	echo $(SRCDIR)
 	rm -f $(OBJ)
+	rm -f main

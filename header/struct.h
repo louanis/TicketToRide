@@ -54,6 +54,7 @@ typedef struct t_player_{
 
 typedef struct t_game_info_{
     int playerTurn; //1 me 2 op
+    int playerReplay;
     int myNumber;
     BoardState visibleCards;
     CardColor myCards[9];
