@@ -22,13 +22,12 @@ void auto_loop(t_game_info * game_info){
     myMove.action = 5;
     chose_obj(game_info,&myMove,&moveResult);
     sendMove(&myMove,&moveResult);
+    printf(" BBBBBB ");
     if(game_info->playerTurn==2){
         getMove(&oppMove,&moveResult);
         getMove(&oppMove,&moveResult);
     }
-
 	while(1){ 
-        printf("%d",game_info->playerTurn);
 
 
 		if(game_info->playerTurn == 2){
@@ -70,6 +69,7 @@ void auto_loop(t_game_info * game_info){
             }
 
 		}else if(game_info->playerTurn == 1){
+            printf("AAAA");
 			getMove(&oppMove,&moveResult);
 			free(moveResult.message);
 			free(moveResult.opponentMessage);

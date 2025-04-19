@@ -2,6 +2,23 @@
 #include <stdlib.h>
 #include "../header/all.h"
 
+int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1 if possible with col1, 2 if possible with col2 ; takes into account loco
+    int wagon_placable1 = game_info->myCards[track->col1] + game_info->myCards[9];
+    int wagon_placable2 = 0;
+    if(track->col2!=0){
+        wagon_placable2 = game_info->myCards[track->col2] + game_info->myCards[9];
+    }   
+
+    if(wagon_placable1 >= track->length){
+        return 1;
+    } else if(wagon_placable2 >= track->length){
+        return 2;
+    } 
+    return 0;
+} 
+
+
+
 /*Gives us the value for 1 track targeted to the building of the dijktra*/
 uint32 track_value_dijktra(const void * e1, int mode){
     return ((t_track*) e1) -> length;
@@ -49,7 +66,7 @@ uint32 cost_track(t_game_info * game_info, t_track * track, int dist_from_start)
         // value -= track->length-game_info->myCards[track->col2]; 
     } 
 
-
+    return 0;
 } 
 
 /*Dijktra*/
