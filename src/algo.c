@@ -2,14 +2,28 @@
 #include <stdlib.h>
 #include "../header/all.h"
 
-int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1 if possible with col1, 2 if possible with col2 ; takes into account loco
-    int wagon_placable1 = game_info->myCards[track->col1] + game_info->myCards[9];
+int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1 if possible with col1, 2 if possible with col2 and 10+[color id] if the track is grey ; takes into account loco
+    
+    if(track->owner != 0){ //We only look at free tracks
+        return 0;
+    } 
+
+    if(track->col1 == 9){
+        // TODO : list of color by least important to most important to chose the less important as possible
+        for(int i = 1;i<9;i++){
+            if(game_info->myCards[i] + game_info->myCards[9] > track->length){
+                return 10+i;
+            } 
+        } 
+    } 
+    
+    int wagon_placable1 = game_info->myCards[track->col1] + game_info->myCards[9]; //Number of cards of col1
     int wagon_placable2 = 0;
     if(track->col2!=0){
-        wagon_placable2 = game_info->myCards[track->col2] + game_info->myCards[9];
+        wagon_placable2 = game_info->myCards[track->col2] + game_info->myCards[9]; //Number of cards of col2
     }   
 
-    if(wagon_placable1 >= track->length){
+    if(wagon_placable1 >= track->length){   // This will be changed at one point to use the card the less needed in the globality of the game
         return 1;
     } else if(wagon_placable2 >= track->length){
         return 2;
@@ -18,10 +32,35 @@ int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1
 } 
 
 
+uint32 choose_biggest(t_game_info * game_info){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
+
+    int currsize = 0;
+    t_track currtrack;
+    uint32 retcit;
+    for(int i = 0; i<game_info->board->size;i++){
+        for(int j = 0; j<game_info->board->size;j++){
+            currtrack = game_info->board->M[i][j];  
+            if(is_placable(game_info,&currtrack) != 0){
+                if(currsize<currtrack.length){
+                    currsize = currtrack.length;
+                    retcit = (i<<16) + j;
+                } 
+            } 
+        } 
+    } 
+    if (currsize == 0){
+        return 0;
+    } 
+    return retcit;
+}
+
+t_track * uint_city_to_track(t_game_info * game_info, uint32 cit){
+    return &(game_info->board->M[cit&0xFFFF][cit>>16]);
+} 
 
 /*Gives us the value for 1 track targeted to the building of the dijktra*/
 uint32 track_value_dijktra(const void * e1, int mode){
-    return ((t_track*) e1) -> length;
+    return score(((t_track*) e1) -> length);
 }
 
 /*Gives us the total track value after considering the dijktra*/

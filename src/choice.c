@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include "../header/all.h"
 
-int chose_move(t_game_info * game_info){
-    
-
+int chose_move(t_game_info * game_info){ 
+    // TODO : REMAKE THE FUNCTION SO THAT EVERYTING FROM SELECTION TO SENDING TO THE GAME IS DONE INSIDE THIS FUNCTION
+    if(choose_biggest(game_info) != 0){
+        return 1;
+    } 
 
     return 2;
 }
@@ -20,3 +22,4 @@ int chose_obj(t_game_info * game_info, MoveData * myMove, MoveResult * mresult){
     myMove->chooseObjectives[max] = 0;
     return 1;
 }
+

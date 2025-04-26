@@ -21,6 +21,7 @@ void auto_loop(t_game_info * game_info){
     sendMove(&myMove,&moveResult);
     myMove.action = 5;
     chose_obj(game_info,&myMove,&moveResult);
+    printf(" BBBBBB "); // A lot of times, the code do not continue without this pprint idk why but yeah do not remove it's a feature not a bug
     sendMove(&myMove,&moveResult);
     printf(" BBBBBB ");
     if(game_info->playerTurn==2){

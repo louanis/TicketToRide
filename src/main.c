@@ -14,7 +14,7 @@ int main(){
 
     
     GameData Gdat;
-    actionResult = sendGameSettings("TRAINING PLAY_RANDOM delay=2", &Gdat);
+    actionResult = sendGameSettings("TRAINING PLAY_RANDOM", &Gdat);
     printf("-----");
     
     actionResult = printBoard();
@@ -41,6 +41,7 @@ int main(){
     for(int i = 0;i<4;i++){
         gameInfo->myCards[Gdat.cards[i]]++; 
     }
+    //gameInfo->availableCardsMajoration[1] =  
     // getBoardState(&gameInfo->visibleCards);
     //--------------------------------------------------------
     
