@@ -71,7 +71,8 @@ void auto_loop(t_game_info * game_info){
 
 		}else if(game_info->playerTurn == 2){
             printf("AAAA");
-			getMove(&oppMove,&moveResult);
+			getMove(&oppMove,&moveResult);            
+            update_info(game_info,&oppMove,2);
 			free(moveResult.message);
 			free(moveResult.opponentMessage);
 

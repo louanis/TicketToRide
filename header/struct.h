@@ -64,6 +64,8 @@ typedef struct t_game_info_{
     int wagons[2]; //wagons[0] my wagons, wagons[1] opp wagons,  
     t_matrix_track * board;
     GameData * gData;
+    int oppCardCounter;
+    int speed; //The more obj opp draws, the faster im trying to finish
 }t_game_info;
 
 

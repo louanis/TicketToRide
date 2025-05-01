@@ -114,3 +114,48 @@ void claim_track_board(t_matrix_track * matrix, int player, ClaimRouteMove claim
 /*--------------------------PLAYERS--------------------------*/
 
 /*--------------------------GAME INFO--------------------------*/
+
+void update_info(t_game_info * game_info, MoveData * dmove,MoveResult * rmove, int playerNumber){
+    switch(dmove->action){
+        case 1:
+        break;
+
+        
+        //Case 2 is gonna be the default bcause there is nothing i know from the move exept that he did it
+
+
+        case 3:
+            switch(playerNumber){
+                case 1:
+                break;
+                default:
+                break;
+            } 
+        break;
+
+
+
+
+        case 4:
+        break;
+
+
+
+        case 5:
+        break;
+
+
+
+        //CASE 2
+        default:
+            switch(playerNumber){
+                case 1:
+                    game_info->myCards[rmove->card] += 1;
+                break;
+                default:
+                    game_info->oppCardCounter += 1;
+                break;
+            } 
+        break;
+    } 
+} 

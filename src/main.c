@@ -51,6 +51,8 @@ int main(){
     }
     //gameInfo->availableCardsMajoration[1] =  
     // getBoardState(&gameInfo->visibleCards);
+    gameInfo->oppCardCounter = 5;
+    gameInfo->speed = 1;
     //--------------------------------------------------------
     
 
