@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "all.h": "c"
+        "all.h": "c",
+        "stdlib.h": "c"
     },
     "github.copilot.enable": {
         "*": false,

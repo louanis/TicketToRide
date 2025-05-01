@@ -7,10 +7,10 @@ SRC = $(addprefix $(SRCDIR),$(FILE)) $(addprefix $(APIDIR),$(FILEAPI))
 OBJ= $(SRC:.c=.o)
 
 main : $(OBJ)
-	gcc -g -o $@ $^ 
+	gcc -o $@ $^ 
 
 %.o : %.c
-	gcc -Wall -Werror -g -c -o $@ $^
+	gcc -Wall -Werror -c -o $@ $^
 
 .PHONY : clean
 clean : 

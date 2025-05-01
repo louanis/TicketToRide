@@ -17,10 +17,10 @@ int main(){
     actionResult = sendGameSettings("TRAINING PLAY_RANDOM", &Gdat);
     printf("-----");
     
-    actionResult = printBoard();
+    //actionResult = printBoard();
     printf("%d",actionResult);
 
-    print_board_data(Gdat);
+    // print_board_data(Gdat);
 
     // printf("------");
     t_matrix_track * gamestate = init_matrix_track(Gdat);
@@ -34,7 +34,15 @@ int main(){
     gameInfo->gData = &Gdat;
     gameInfo->board = gamestate;
     gameInfo->myNumber = 1;
-    gameInfo->playerTurn = 1+((Gdat.starter-1)^1);
+    switch(Gdat.starter){
+        case 1:
+        gameInfo->playerTurn = 2;
+        break;
+
+        default:
+        gameInfo->playerTurn = 1;
+        break;
+    }
     for(int i = 0;i<9;i++){
         gameInfo->myCards[i] = 0;
     } 

@@ -21,22 +21,22 @@ void auto_loop(t_game_info * game_info){
     sendMove(&myMove,&moveResult);
     myMove.action = 5;
     chose_obj(game_info,&myMove,&moveResult);
+    printf("%d",game_info->playerTurn);
     printf(" BBBBBB "); // A lot of times, the code do not continue without this pprint idk why but yeah do not remove it's a feature not a bug
     sendMove(&myMove,&moveResult);
     printf(" BBBBBB ");
-    if(game_info->playerTurn==2){
+    if(game_info->playerTurn==1){
         getMove(&oppMove,&moveResult);
         getMove(&oppMove,&moveResult);
     }
 	while(1){ 
 
-
-		if(game_info->playerTurn == 2){
+		if(game_info->playerTurn == 1){
             myMove.action = chose_move(game_info);
 			sendMove(&myMove,&moveResult);
             switch(myMove.action){
                 case 1:
-                    game_info->playerTurn = 1;
+                    game_info->playerTurn = 2;
                     replay = 0;
                 case 2:
                     switch(replay){
@@ -45,7 +45,7 @@ void auto_loop(t_game_info * game_info){
                         break;
                         default:
                             replay = 0;
-                            game_info->playerTurn = 1;
+                            game_info->playerTurn = 2;
                         break;
                     }
                 break;
@@ -56,7 +56,7 @@ void auto_loop(t_game_info * game_info){
                     break;
                     default:
                         replay = 0;
-                        game_info->playerTurn = 1;
+                        game_info->playerTurn = 2;
                     break;
                     }
                 break;
@@ -64,12 +64,12 @@ void auto_loop(t_game_info * game_info){
                     replay = 1;
                 break;
                 default:   
-                    game_info->playerTurn = 1;
+                    game_info->playerTurn = 2;
                     replay = 0;
                 break;
             }
 
-		}else if(game_info->playerTurn == 1){
+		}else if(game_info->playerTurn == 2){
             printf("AAAA");
 			getMove(&oppMove,&moveResult);
 			free(moveResult.message);
@@ -79,12 +79,12 @@ void auto_loop(t_game_info * game_info){
 
 				switch(replay){
 					case 0:
-						game_info->playerTurn = 1;
+						game_info->playerTurn = 2;
 						replay = 1;
 					break;
 
 					default:
-						game_info->playerTurn = 2;
+						game_info->playerTurn = 1;
 						replay = 0;
 					break;
 				} 
@@ -97,21 +97,23 @@ void auto_loop(t_game_info * game_info){
 				} else{
                     switch(replay){
                         case 0:  
-					        game_info->playerTurn = 1;
+					        game_info->playerTurn = 2;
                             replay = 1;
                         break;
 
                         default:
-					        game_info->playerTurn = 2;
+					        game_info->playerTurn = 1;
                             replay = 0;
                         break;
                     }
 
 				} 
+                printf("//////%d\\\\\\\\\\\\\\\n",oppMove.drawCard);
 			}  else{
-				game_info->playerTurn = 2;
+				game_info->playerTurn = 1;
                 replay = 0;
 			} 
+            printf("----------%d----------",oppMove.action);
 		} 
 	} 
 }

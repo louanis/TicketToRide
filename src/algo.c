@@ -32,27 +32,6 @@ int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1
 } 
 
 
-uint32 choose_biggest(t_game_info * game_info){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
-
-    int currsize = 0;
-    t_track currtrack;
-    uint32 retcit;
-    for(int i = 0; i<game_info->board->size;i++){
-        for(int j = 0; j<game_info->board->size;j++){
-            currtrack = game_info->board->M[i][j];  
-            if(is_placable(game_info,&currtrack) != 0){
-                if(currsize<currtrack.length){
-                    currsize = currtrack.length;
-                    retcit = (i<<16) + j;
-                } 
-            } 
-        } 
-    } 
-    if (currsize == 0){
-        return 0;
-    } 
-    return retcit;
-}
 
 t_track * uint_city_to_track(t_game_info * game_info, uint32 cit){
     return &(game_info->board->M[cit&0xFFFF][cit>>16]);
