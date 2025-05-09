@@ -159,3 +159,7 @@ void update_info(t_game_info * game_info, MoveData * dmove,MoveResult * rmove, i
         break;
     } 
 } 
+
+void update_biggest_per_color(t_game_info * game_info){
+    
+} 

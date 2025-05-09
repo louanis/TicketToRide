@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../header/all.h"
 
-int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1 if possible with col1, 2 if possible with col2 and 10+[color id] if the track is grey ; takes into account loco
+int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, the color number, takes into account locomotives but the number needs to be calculated afterwards
     
     if(track->owner != 0){ //We only look at free tracks
         return 0;
@@ -11,8 +11,8 @@ int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1
     if(track->col1 == 9){
         // TODO : list of color by least important to most important to chose the less important as possible
         for(int i = 1;i<9;i++){
-            if(game_info->myCards[i] + game_info->myCards[9] > track->length){
-                return 10+i;
+            if(game_info->myCards[i] + game_info->myCards[9] >= track->length){
+                return i;
             } 
         } 
     } 
@@ -24,13 +24,12 @@ int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, 1
     }   
 
     if(wagon_placable1 >= track->length){   // This will be changed at one point to use the card the less needed in the globality of the game
-        return 1;
+        return track->col1;
     } else if(wagon_placable2 >= track->length){
-        return 2;
+        return track->col2;
     } 
     return 0;
 } 
-
 
 
 t_track * uint_city_to_track(t_game_info * game_info, uint32 cit){

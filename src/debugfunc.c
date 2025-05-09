@@ -68,3 +68,17 @@ void AfficherObjectif(MoveResult * mresult){
     printf("\n");
     return;
 }  
+
+void print_move(MoveData * playMove){
+    printf("\n");
+    switch(playMove->action){
+        case 1:
+            printf("from : %d, to: %d, loco: %d, color: %d",playMove->claimRoute.from,playMove->claimRoute.to,playMove->claimRoute.nbLocomotives, playMove->claimRoute.color);
+        break;
+        case 2:
+            printf("blind");
+        break;
+        default:
+        break;
+    } 
+} 

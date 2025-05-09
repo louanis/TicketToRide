@@ -5,7 +5,10 @@
 #define PORT_SERVER 15001
 #define ADDR_SERVER "82.29.170.160"
 
-int main(){
+int main(int argc,char** argv){
+
+    for(int i = 0;i<argc;i++){
+    } 
     extern int DEBUG_LEVEL;
     DEBUG_LEVEL = INTERN_DEBUG;
 
@@ -14,10 +17,10 @@ int main(){
 
     
     GameData Gdat;
-    actionResult = sendGameSettings("TRAINING PLAY_RANDOM", &Gdat);
+    actionResult = sendGameSettings("TRAINING PLAY_RANDOM delay=1", &Gdat);
     printf("-----");
     
-    //actionResult = printBoard();
+    actionResult = printBoard();
     printf("%d",actionResult);
 
     // print_board_data(Gdat);

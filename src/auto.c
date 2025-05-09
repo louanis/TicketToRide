@@ -32,12 +32,16 @@ void auto_loop(t_game_info * game_info){
 	while(1){ 
 
 		if(game_info->playerTurn == 1){
-            myMove.action = chose_move(game_info);
+            myMove.action = chose_move(game_info, &myMove);
+            print_move(&myMove);
 			sendMove(&myMove,&moveResult);
             switch(myMove.action){
                 case 1:
+                    printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
                     game_info->playerTurn = 2;
                     replay = 0;
+                    
+                break;
                 case 2:
                     switch(replay){
                         case 0:
@@ -48,6 +52,7 @@ void auto_loop(t_game_info * game_info){
                             game_info->playerTurn = 2;
                         break;
                     }
+                    game_info->myCards[moveResult.card] += 1;
                 break;
                 case 3:
                 switch(replay){
@@ -59,6 +64,7 @@ void auto_loop(t_game_info * game_info){
                         game_info->playerTurn = 2;
                     break;
                     }
+                    game_info->myCards[myMove.drawCard] += 1;
                 break;
                 case 4:
                     replay = 1;
@@ -68,53 +74,57 @@ void auto_loop(t_game_info * game_info){
                     replay = 0;
                 break;
             }
-
 		}else if(game_info->playerTurn == 2){
             printf("AAAA");
 			getMove(&oppMove,&moveResult);            
-            update_info(game_info,&oppMove,2);
+            update_info(game_info,&oppMove,&moveResult,2);
 			free(moveResult.message);
 			free(moveResult.opponentMessage);
 
-			if((int)oppMove.action == 2 || (int)oppMove.action == 4 ){ //%2 == 0
-
-				switch(replay){
-					case 0:
-						game_info->playerTurn = 2;
-						replay = 1;
-					break;
-
-					default:
-						game_info->playerTurn = 1;
-						replay = 0;
-					break;
-				} 
-
-			} else if ((int)oppMove.action == 3){ // if in another if to prevent wrongful acess of 
-				if( (int)oppMove.drawCard == 9){
-					game_info->playerTurn = 1;
+            
+            switch(oppMove.action){
+                case 1:
+                    printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
+                    game_info->playerTurn = 1;
                     replay = 0;
-
-				} else{
+                break;
+                case 2:
                     switch(replay){
-                        case 0:  
-					        game_info->playerTurn = 2;
+                        case 0:
                             replay = 1;
                         break;
-
                         default:
-					        game_info->playerTurn = 1;
                             replay = 0;
+                            game_info->playerTurn = 1;
                         break;
                     }
+                break;
+                case 3:
+                switch(replay){
+                    case 0:
+                        printf("quoicoubehhhh");
+                        replay = 1;
+                    break;
+                    default:
+                        replay = 0;
+                        game_info->playerTurn = 1;
+                    break;
+                    }
+                break;
+                case 4:
+                    replay = 1;
+                break;
+                default:   
+                    game_info->playerTurn = 1;
+                    replay = 0;
+                break;
+            } 
 
-				} 
-                printf("//////%d\\\\\\\\\\\\\\\n",oppMove.drawCard);
-			}  else{
-				game_info->playerTurn = 1;
-                replay = 0;
-			} 
+
             printf("----------%d----------",oppMove.action);
 		} 
+
+        printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->playerTurn);
+        printf("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB %d BBBBBBBBBBBBBBBB",replay);
 	} 
 }

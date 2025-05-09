@@ -8,6 +8,7 @@ void is_all_good(ResultCode actionResult);
 void AfficherEtatPlateau(BoardState * EtatPlateau);
 void AfficherAction(MoveData * moveData);
 void AfficherObjectif(MoveResult * mresult);
+void print_move(MoveData * playMove);
 
 
 #endif
