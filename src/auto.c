@@ -32,6 +32,7 @@ void auto_loop(t_game_info * game_info){
 	while(1){ 
 
 		if(game_info->playerTurn == 1){
+            game_info->playerReplay = replay;
             myMove.action = chose_move(game_info, &myMove);
             print_move(&myMove);
 			sendMove(&myMove,&moveResult);
@@ -55,14 +56,15 @@ void auto_loop(t_game_info * game_info){
                     game_info->myCards[moveResult.card] += 1;
                 break;
                 case 3:
-                switch(replay){
-                    case 0:
-                        replay = 1;
-                    break;
-                    default:
-                        replay = 0;
-                        game_info->playerTurn = 2;
-                    break;
+                //Dont even consider picking a locomotive if not blind, not worth it as i want to end the game as soon as possible
+                    switch(replay){
+                        case 0:
+                            replay = 1;
+                        break;
+                        default:
+                            replay = 0;
+                            game_info->playerTurn = 2;
+                        break;
                     }
                     game_info->myCards[myMove.drawCard] += 1;
                 break;
@@ -87,6 +89,9 @@ void auto_loop(t_game_info * game_info){
                     printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
                     game_info->playerTurn = 1;
                     replay = 0;
+                    game_info->board->M[oppMove.claimRoute.from][oppMove.claimRoute.to].owner = -1;
+                    game_info->board->M[oppMove.claimRoute.to][oppMove.claimRoute.from].owner = -1;
+                    game_info->wagons[1] -= game_info->board->M[oppMove.claimRoute.from][oppMove.claimRoute.to].length; 
                 break;
                 case 2:
                     switch(replay){
@@ -100,16 +105,24 @@ void auto_loop(t_game_info * game_info){
                     }
                 break;
                 case 3:
-                switch(replay){
-                    case 0:
-                        printf("quoicoubehhhh");
-                        replay = 1;
-                    break;
-                    default:
-                        replay = 0;
-                        game_info->playerTurn = 1;
-                    break;
+                    switch(replay){
+                        case 0:
+                            printf("quoicoubehhhh");
+                            replay = 1;
+                        break;
+                        default:
+                            replay = 0;
+                            game_info->playerTurn = 1;
+                        break;
                     }
+                    switch(oppMove.drawCard){
+                        case 9:
+                            replay = 0;
+                            game_info->playerTurn = 1;
+                        break;
+                        default:
+                        break;
+                    } 
                 break;
                 case 4:
                     replay = 1;

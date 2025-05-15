@@ -61,6 +61,7 @@ typedef struct t_game_info_{
     t_track bestTracks[10];
     int myCards[10]; //The cards will be set to 0 and the 0th element will stay 0 forever to not burden myself with verification of color index later on
     int availableCardsMajoration[10];
+    uint32 chosenCol; //The color i chose to focus on, if &(1<<x) >0 then i am focusing on the x color
     int wagons[2]; //wagons[0] my wagons, wagons[1] opp wagons,  
     t_matrix_track * board;
     GameData * gData;

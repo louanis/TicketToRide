@@ -4,26 +4,39 @@
 
 int chose_move(t_game_info * game_info, MoveData * playMove){ 
 
-    if(is_placable(game_info,&game_info->board->M[22][23]) >0){
-        build_route(game_info,playMove,22,23);
-        return 1;
-    } 
+    if(game_info->playerReplay == 0){  
+        if(is_placable(game_info,&game_info->board->M[22][23]) >0){
+            build_route(game_info,playMove,22,23);
+            return 1;
+        } 
 
-    if(is_placable(game_info,&game_info->board->M[0][1]) >0){
-        build_route(game_info,playMove,0,1);
-        return 1;
-    } 
+        if(is_placable(game_info,&game_info->board->M[0][1]) >0){
+            build_route(game_info,playMove,0,1);
+            return 1;
+        } 
 
-    if(is_placable(game_info,&game_info->board->M[1][2]) >0){
-        build_route(game_info,playMove,1,2);
-        return 1;
-    } 
+        if(is_placable(game_info,&game_info->board->M[1][2]) >0){
+            build_route(game_info,playMove,1,2);
+            return 1;
+        } 
 
+        if(is_placable(game_info,&game_info->board->M[16][17]) >0){
+            build_route(game_info,playMove,16,17);
+            return 1;
+        } 
+
+        
+        uint32 road = choose_biggest(game_info,5); 
+        if(road != (uint32) 0){
+            build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
+            return 1;
+        } 
+    } 
 
     playMove->action = 2;
     return 2;
     // TODO : REMAKE THE FUNCTION SO THAT EVERYTING FROM SELECTION TO SENDING TO THE GAME IS DONE INSIDE THIS FUNCTION
-    if(choose_biggest(game_info) != 0){
+    if(choose_biggest(game_info,4) != 0){
         return 1;
     } 
 }
@@ -41,7 +54,7 @@ int chose_obj(t_game_info * game_info, MoveData * myMove, MoveResult * mresult){
 }
 
 
-uint32 choose_biggest(t_game_info * game_info){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
+uint32 choose_biggest(t_game_info * game_info,int min){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
 
     int currsize = 0;
     t_track currtrack;
@@ -50,7 +63,7 @@ uint32 choose_biggest(t_game_info * game_info){ //if no biggest placable, return
         for(int j = 0; j<game_info->board->size;j++){
             currtrack = game_info->board->M[i][j];  
             if(is_placable(game_info,&currtrack) != 0){
-                if(currsize<currtrack.length){
+                if(currsize<currtrack.length && currtrack.length >= min && currtrack.length <= game_info->wagons[0] ){
                     currsize = currtrack.length;
                     retcit = (i<<16) + j;
                 } 
@@ -63,7 +76,7 @@ uint32 choose_biggest(t_game_info * game_info){ //if no biggest placable, return
     return retcit;
 }
 
-uint32 choose_biggest_per_col(t_game_info * game_info,int col){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
+uint32 choose_biggest_per_col(t_game_info * game_info,int min, int col){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
 
     int currsize = 0;
     t_track currtrack;
@@ -86,11 +99,11 @@ uint32 choose_biggest_per_col(t_game_info * game_info,int col){ //if no biggest 
 }
 
 
-uint32 min_presence_col(t_game_info * game_info){
+int min_presence_col(t_game_info * game_info,int threshold){ //Returns the least present color in the deck but still above a certain threshold, if none then returns -1
     int set_min = 0;
-    int ret_id;
+    int ret_id = -1;
     for(int i = 1;i<9;i++){
-        if(game_info->myCards[i] > 0){
+        if(game_info->myCards[i] >= threshold){
             if(set_min == 0){
                 ret_id = i;
                 set_min = 1;
@@ -102,7 +115,7 @@ uint32 min_presence_col(t_game_info * game_info){
             } 
         } 
     } 
-    return (uint32) ret_id;
+    return ret_id;
 }
 
 void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint32 cit2){
@@ -120,6 +133,7 @@ void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint
     game_info->board->M[cit2][cit1].owner = 1;
     game_info->myCards[playMove->claimRoute.color] -=  game_info->board->M[cit1][cit2].length - playMove->claimRoute.nbLocomotives;
     game_info->myCards[9] -= playMove->claimRoute.nbLocomotives; 
+    game_info->wagons[0] -= game_info->board->M[cit1][cit2].length; 
 
     return;
 } 

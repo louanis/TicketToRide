@@ -4,17 +4,24 @@
 
 int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, the color number, takes into account locomotives but the number needs to be calculated afterwards
     
+
     if(track->owner != 0){ //We only look at free tracks
         return 0;
     } 
 
     if(track->col1 == 9){
+        int currmin = 0;
         // TODO : list of color by least important to most important to chose the less important as possible
         for(int i = 1;i<9;i++){
             if(game_info->myCards[i] + game_info->myCards[9] >= track->length){
-                return i;
+                currmin = i;
+                break;
             } 
         } 
+        if(currmin == 0){
+            return 0;
+        } 
+        return min_presence_col(game_info,game_info->myCards[currmin]);
     } 
     
     int wagon_placable1 = game_info->myCards[track->col1] + game_info->myCards[9]; //Number of cards of col1

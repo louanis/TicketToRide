@@ -17,7 +17,7 @@ int main(int argc,char** argv){
 
     
     GameData Gdat;
-    actionResult = sendGameSettings("TRAINING PLAY_RANDOM delay=1", &Gdat);
+    actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
     printf("-----");
     
     actionResult = printBoard();
@@ -52,6 +52,8 @@ int main(int argc,char** argv){
     for(int i = 0;i<4;i++){
         gameInfo->myCards[Gdat.cards[i]]++; 
     }
+    gameInfo->wagons[0] = 45;
+    gameInfo->wagons[1] = 45; 
     //gameInfo->availableCardsMajoration[1] =  
     // getBoardState(&gameInfo->visibleCards);
     gameInfo->oppCardCounter = 5;
