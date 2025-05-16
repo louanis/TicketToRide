@@ -1,6 +1,39 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h> 
+#include <curl/curl.h>
 #include "../header/all.h"
+
+/*I used copilot to find the alternative to the windows version on :
+https://stackoverflow.com/questions/58467675/how-to-open-web-urls-using-c-language 
+*/
+void open_website_part(char *magic_word) {
+    CURL *curl;
+    CURLcode res;
+
+    // Initialize a CURL session
+    curl = curl_easy_init();
+    if (curl) {
+        // Format the URL with the provided magic_word
+        char url[256];
+        snprintf(url, sizeof(url), "http://82.29.170.160:8889/player/disconnect/%s", magic_word);
+
+        // Set the URL for the CURL request
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+
+        // Perform the request
+        res = curl_easy_perform(curl);
+
+        // Check for errors
+        if (res != CURLE_OK) {
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        }
+
+        // Clean up the CURL session
+        curl_easy_cleanup(curl);
+    }
+}
 
 int is_placable(t_game_info * game_info, t_track * track){ //returns 0 if not, the color number, takes into account locomotives but the number needs to be calculated afterwards
     
@@ -141,3 +174,5 @@ void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2
     free(tracks);
 
 }
+
+

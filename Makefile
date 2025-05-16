@@ -7,7 +7,7 @@ SRC = $(addprefix $(SRCDIR),$(FILE)) $(addprefix $(APIDIR),$(FILEAPI))
 OBJ= $(SRC:.c=.o)
 
 main : $(OBJ)
-	gcc -g -o $@ $^ 
+	gcc -g -o $@ $^ -lcurl  
 
 %.o : %.c
 	gcc -g -Wall -Werror -c -o $@ $^

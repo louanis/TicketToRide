@@ -26,12 +26,57 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
         } 
 
         
-        uint32 road = choose_biggest(game_info,5); 
+        uint32 road = choose_biggest(game_info,6); 
+        if(road == 0){
+            road = choose_biggest(game_info,5);
+        } 
+        if(road == 0){
+            road = choose_biggest(game_info,4);
+        } 
         if(road != (uint32) 0){
             build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
             return 1;
         } 
     } 
+
+    // /*----
+    // Choose the best face-up card to build the biggest route*/
+    int bestCardIndex = -1;
+    int maxPotential = 0;
+
+    for (int i = 0; i < 5; i++) { // Iterate over the 5 face-up cards
+        int cardColor = game_info->visibleCards.card[i];
+        if (cardColor == 0 || cardColor == 9) {
+            continue; // Skip if the card is not valid
+        }
+
+        // /*Calculate the potential of this card to help build the biggest route*/
+        int potential = 0;
+        for (int j = 0; j < game_info->board->size; j++) {
+            for (int k = 0; k < game_info->board->size; k++) {
+                t_track *track = &game_info->board->M[j][k];
+                if (track->owner == 0 && (track->col1 == cardColor || track->col2 == cardColor || track->col1 == 9)) {
+                    int neededCards = track->length - game_info->myCards[cardColor] - game_info->myCards[9];
+                    if (neededCards <= 1) { // Prioritize tracks that are close to being completed
+                        potential += track->length;
+                    }
+                }
+            }
+        }
+
+        // /*Update the best card if this one has higher potential*/
+        if (potential > maxPotential) {
+            maxPotential = potential;
+            bestCardIndex = i;
+        }
+    }
+
+    if (bestCardIndex != -1 && bestCardIndex != 9 && bestCardIndex != 0) {
+        playMove->action = 3; // Draw a face-up card
+        playMove->drawCard = game_info->visibleCards.card[bestCardIndex] ;
+        return 3;
+    }
+
 
     playMove->action = 2;
     return 2;
@@ -54,25 +99,47 @@ int chose_obj(t_game_info * game_info, MoveData * myMove, MoveResult * mresult){
 }
 
 
-uint32 choose_biggest(t_game_info * game_info,int min){ //if no biggest placable, returns 0. else returns (city1<<16)+city2 or the opposite it doesn't matter, i can <<16 bcause the city id will never be on more bits than 16 anyway
-
+uint32 choose_biggest(t_game_info *game_info, int min) {
     int currsize = 0;
     t_track currtrack;
-    uint32 retcit;
-    for(int i = 0; i<game_info->board->size;i++){
-        for(int j = 0; j<game_info->board->size;j++){
-            currtrack = game_info->board->M[i][j];  
-            if(is_placable(game_info,&currtrack) != 0){
-                if(currsize<currtrack.length && currtrack.length >= min && currtrack.length <= game_info->wagons[0] ){
-                    currsize = currtrack.length;
-                    retcit = (i<<16) + j;
-                } 
-            } 
-        } 
-    } 
-    if (currsize == 0){
+    uint32 retcit = 0;
+
+    // Array to track connected cities
+    int *connectedCities = (int *)calloc(game_info->board->size, sizeof(int));
+
+    // Mark cities already connected by owned tracks
+    for (int i = 0; i < game_info->board->size; i++) {
+        for (int j = 0; j < game_info->board->size; j++) {
+            if (game_info->board->M[i][j].owner == 1) { // Owned track
+                connectedCities[i] = 1;
+                connectedCities[j] = 1;
+            }
+        }
+    }
+
+    for (int i = 0; i < game_info->board->size; i++) {
+        for (int j = 0; j < game_info->board->size; j++) {
+            currtrack = game_info->board->M[i][j];
+            if (is_placable(game_info, &currtrack) != 0) {
+                // Check if the track connects to a city already connected
+                int isPriority = connectedCities[i] || connectedCities[j];
+
+                // Prioritize tracks that connect to already connected cities
+                if ((isPriority && currsize <= currtrack.length) || (!isPriority && currsize < currtrack.length)) {
+                    if (currtrack.length >= min && currtrack.length <= game_info->wagons[0]) {
+                        currsize = currtrack.length;
+                        retcit = (i << 16) + j;
+                    }
+                }
+            }
+        }
+    }
+
+    free(connectedCities);
+
+    if (currsize == 0) {
         return 0;
-    } 
+    }
     return retcit;
 }
 
@@ -136,4 +203,4 @@ void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint
     game_info->wagons[0] -= game_info->board->M[cit1][cit2].length; 
 
     return;
-} 
+}

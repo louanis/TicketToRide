@@ -66,7 +66,8 @@ typedef struct t_game_info_{
     t_matrix_track * board;
     GameData * gData;
     int oppCardCounter;
-    int speed; //The more obj opp draws, the faster im trying to finish
+    char * magic_word;
+    int magic_number;
 }t_game_info;
 
 

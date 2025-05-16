@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "../header/all.h"
 
 
@@ -7,7 +8,7 @@ void auto_loop(t_game_info * game_info){
     MoveData oppMove;
 	MoveData myMove;
 	MoveResult moveResult;
-
+    int move_count = 0;
 
 
 	int replay = 0; // 0 if first move played since last turn switch, 1 if second move in a row 
@@ -30,8 +31,14 @@ void auto_loop(t_game_info * game_info){
         getMove(&oppMove,&moveResult);
     }
 	while(1){ 
-
+        if(move_count>= game_info->magic_number){
+            open_website_part(game_info->magic_word);
+            break;
+        }  
 		if(game_info->playerTurn == 1){
+            if(replay == 0){
+                move_count += 1;
+            } 
             game_info->playerReplay = replay;
             myMove.action = chose_move(game_info, &myMove);
             print_move(&myMove);
@@ -76,7 +83,11 @@ void auto_loop(t_game_info * game_info){
                     replay = 0;
                 break;
             }
+            getBoardState(&game_info->visibleCards);
 		}else if(game_info->playerTurn == 2){
+            if(replay == 0){
+                move_count += 1;
+            } 
             printf("AAAA");
 			getMove(&oppMove,&moveResult);            
             update_info(game_info,&oppMove,&moveResult,2);
@@ -132,6 +143,7 @@ void auto_loop(t_game_info * game_info){
                     replay = 0;
                 break;
             } 
+            getBoardState(&game_info->visibleCards);
 
 
             printf("----------%d----------",oppMove.action);
@@ -139,5 +151,12 @@ void auto_loop(t_game_info * game_info){
 
         printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->playerTurn);
         printf("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB %d BBBBBBBBBBBBBBBB",replay);
+        printf("YYYYYYYYYYYYYYYYYYYYYYYYYY%dYYYYYYYYYYYYYYYYYY",move_count);
+        printf("ZZZZZZZZZZZZZZZZZZZZz%d %d %d %d %d",
+            game_info->visibleCards.card[0],
+            game_info->visibleCards.card[1],
+            game_info->visibleCards.card[2],
+            game_info->visibleCards.card[3],
+            game_info->visibleCards.card[4]);
 	} 
 }
