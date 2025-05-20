@@ -8,8 +8,11 @@
 
 int main(int argc,char** argv){
 
+    /*UTILISATION ARGC ARGV*/
     char *activeWord = NULL; // To store the word after --active
-    int activeInt = 0;       // To store the integer after the word
+    int activeInt = -1;       // To store the integer after the word
+    int versus = 0;
+    int lobby = 0;
     char *lobbyString = NULL; // To store the string after --lobby
     // Parse command-line arguments
     for (int i = 1; i < argc; i++) {
@@ -19,7 +22,10 @@ int main(int argc,char** argv){
             i += 2; // Skip the next two arguments
         } else if (strcmp(argv[i], "--lobby") == 0 && i + 1 < argc) {
             lobbyString = argv[i + 1]; // Save the string after --lobby
+            lobby = 1;
             i += 1; // Skip the next argument
+        } else if(strcmp(argv[i], "--versus") == 0) {
+            versus = 1;
         }
     } 
     if (activeWord != NULL) {
@@ -29,6 +35,11 @@ int main(int argc,char** argv){
     if (lobbyString != NULL) {
         printf("Lobby String: %s\n", lobbyString);
     }
+
+
+
+
+
     extern int DEBUG_LEVEL;
     DEBUG_LEVEL = INTERN_DEBUG;
 
@@ -37,7 +48,13 @@ int main(int argc,char** argv){
 
     
     GameData Gdat;
-    actionResult = sendGameSettings("TRAINING NICE_BOT delay=1", &Gdat); //PLAY_RANDOM NICE_BOT
+    if(versus == 0 && lobby == 0){
+        actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
+    }else if(versus == 1){
+        actionResult = sendGameSettings("", &Gdat);
+    } else if(lobby == 1) {
+        actionResult = sendGameSettings("TOURNAMENT NICE_BOT delay=1", &Gdat);
+    }
     printf("-----");
     
     actionResult = printBoard();
@@ -86,5 +103,11 @@ int main(int argc,char** argv){
     free_matrix_track(gamestate);
     printf("Starter %d\n",Gdat.starter);
     actionResult = quitGame();
+    if(activeWord != NULL){
+        free(activeWord);
+    }
+    if(lobbyString != NULL){
+       free(lobbyString); 
+    }
     return 0;
 }

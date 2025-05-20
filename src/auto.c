@@ -31,7 +31,7 @@ void auto_loop(t_game_info * game_info){
         getMove(&oppMove,&moveResult);
     }
 	while(1){ 
-        if(move_count>= game_info->magic_number){
+        if(move_count >= game_info->magic_number && game_info->magic_number != -1){
             open_website_part(game_info->magic_word);
             break;
         }  
@@ -149,7 +149,7 @@ void auto_loop(t_game_info * game_info){
             printf("----------%d----------",oppMove.action);
 		} 
 
-        printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->playerTurn);
+        printf("(((%d)))AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->magic_number,game_info->playerTurn);
         printf("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB %d BBBBBBBBBBBBBBBB",replay);
         printf("YYYYYYYYYYYYYYYYYYYYYYYYYY%dYYYYYYYYYYYYYYYYYY",move_count);
         printf("ZZZZZZZZZZZZZZZZZZZZz%d %d %d %d %d",

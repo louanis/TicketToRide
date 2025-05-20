@@ -25,6 +25,10 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
             return 1;
         } 
 
+        if(is_placable(game_info,&game_info->board->M[22][17]) >0){
+            build_route(game_info,playMove,22,17);
+            return 1;
+        } 
         
         uint32 road = choose_biggest(game_info,6); 
         if(road == 0){
