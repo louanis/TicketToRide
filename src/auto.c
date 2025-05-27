@@ -23,9 +23,9 @@ void auto_loop(t_game_info * game_info){
     myMove.action = 5;
     chose_obj(game_info,&myMove,&moveResult);
     printf("%d",game_info->playerTurn);
-    printf(" BBBBBB "); // A lot of times, the code do not continue without this pprint idk why but yeah do not remove it's a feature not a bug
+    // printf(" BBBBBB "); // A lot of times, the code do not continue without this pprint idk why but yeah do not remove it's a feature not a bug
     sendMove(&myMove,&moveResult);
-    printf(" BBBBBB ");
+    // printf(" BBBBBB ");
     if(game_info->playerTurn==1){
         getMove(&oppMove,&moveResult);
         getMove(&oppMove,&moveResult);
@@ -45,7 +45,7 @@ void auto_loop(t_game_info * game_info){
 			sendMove(&myMove,&moveResult);
             switch(myMove.action){
                 case 1:
-                    printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
+                    // printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
                     game_info->playerTurn = 2;
                     replay = 0;
                     
@@ -88,7 +88,7 @@ void auto_loop(t_game_info * game_info){
             if(replay == 0){
                 move_count += 1;
             } 
-            printf("AAAA");
+            // printf("AAAA");
 			getMove(&oppMove,&moveResult);            
             update_info(game_info,&oppMove,&moveResult,2);
 			free(moveResult.message);
@@ -97,7 +97,7 @@ void auto_loop(t_game_info * game_info){
             
             switch(oppMove.action){
                 case 1:
-                    printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
+                    // printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
                     game_info->playerTurn = 1;
                     replay = 0;
                     game_info->board->M[oppMove.claimRoute.from][oppMove.claimRoute.to].owner = -1;
@@ -146,17 +146,19 @@ void auto_loop(t_game_info * game_info){
             getBoardState(&game_info->visibleCards);
 
 
-            printf("----------%d----------",oppMove.action);
+            // printf("----------%d----------",oppMove.action);
 		} 
+    maj_value(game_info);
 
-        printf("(((%d)))AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->magic_number,game_info->playerTurn);
-        printf("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB %d BBBBBBBBBBBBBBBB",replay);
-        printf("YYYYYYYYYYYYYYYYYYYYYYYYYY%dYYYYYYYYYYYYYYYYYY",move_count);
-        printf("ZZZZZZZZZZZZZZZZZZZZz%d %d %d %d %d",
-            game_info->visibleCards.card[0],
-            game_info->visibleCards.card[1],
-            game_info->visibleCards.card[2],
-            game_info->visibleCards.card[3],
-            game_info->visibleCards.card[4]);
+        // printf("(((%d)))AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %d AAAAAAAAAAAAAAAA",game_info->magic_number,game_info->playerTurn);
+        // printf("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB %d BBBBBBBBBBBBBBBB",replay);
+        // printf("YYYYYYYYYYYYYYYYYYYYYYYYYY%dYYYYYYYYYYYYYYYYYY",move_count);
+        // printf("ZZZZZZZZZZZZZZZZZZZZz%d %d %d %d %d",
+            // game_info->visibleCards.card[0],
+            // game_info->visibleCards.card[1],
+            // game_info->visibleCards.card[2],
+            // game_info->visibleCards.card[3],
+            // game_info->visibleCards.card[4]);
+            // 
 	} 
 }

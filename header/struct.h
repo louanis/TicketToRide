@@ -29,6 +29,7 @@ typedef struct t_track_{
     int owner; // 1 me -1 adv 0 no one
     int col1;
     int col2;
+    uint32 value;
 }t_track;
 
 typedef struct t_matrix_track_{
