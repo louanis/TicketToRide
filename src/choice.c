@@ -15,20 +15,20 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
             return 1;
         } 
 
-        if(is_placable(game_info,&game_info->board->M[1][2]) >0){
-            build_route(game_info,playMove,1,2);
-            return 1;
-        } 
-
-        if(is_placable(game_info,&game_info->board->M[16][17]) >0){
-            build_route(game_info,playMove,16,17);
-            return 1;
-        } 
-
-        if(is_placable(game_info,&game_info->board->M[22][17]) >0){
-            build_route(game_info,playMove,22,17);
-            return 1;
-        } 
+        // if(is_placable(game_info,&game_info->board->M[1][2]) >0){
+            // build_route(game_info,playMove,1,2);
+            // return 1;
+        // } 
+// 
+        // if(is_placable(game_info,&game_info->board->M[16][17]) >0){
+            // build_route(game_info,playMove,16,17);
+            // return 1;
+        // } 
+// 
+        // if(is_placable(game_info,&game_info->board->M[22][17]) >0){
+            // build_route(game_info,playMove,22,17);
+            // return 1;
+        // } 
         
 
         if(game_info->wagons[0] == 0 || game_info->wagons[0] == 1){  

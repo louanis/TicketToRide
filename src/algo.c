@@ -225,7 +225,7 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
             break;
         } 
 
-        game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
+        if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
         curr_upd = prev[curr_upd]; 
 
     } 
