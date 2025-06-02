@@ -198,7 +198,7 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
             if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
                 prev[i] = look_cit; 
                 step[i] = step[prev[i]] + 1;  
-                val[i] = val[look_cit] + game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
+                val[i] = val[look_cit] - game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
             } 
 
         } 
