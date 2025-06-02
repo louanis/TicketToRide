@@ -194,7 +194,7 @@ int min_presence_col(t_game_info * game_info,int threshold){ //Returns the least
 
 void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint32 cit2){
     playMove->action = 1;
-    playMove->claimRoute.color = is_placable(game_info,&game_info->board->M[cit1][cit2]);
+    playMove->claimRoute.color = is_placable(game_info,&game_info->board->M[MAX(cit1,cit2)][MIN(cit1,cit2)]);
     playMove->claimRoute.from = cit1;
     playMove->claimRoute.to = cit2;
 
