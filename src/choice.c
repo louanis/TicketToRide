@@ -45,10 +45,14 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
                 }
 
                 if(start != 1){
-                    if(game_info->board->M[i][j].value <= game_info->wagons[0]  &&game_info->board->M[curra][currb].value < game_info->board->M[i][j].value && game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
-                        curra = i;
-                        currb = j;
-                    } 
+                    printf(";%d;",game_info->board->M[curra][currb].dijktra);
+
+                    if(game_info->board->M[curra][currb].dijktra <= game_info->board->M[i][j].dijktra) {
+                        if(game_info->board->M[i][j].value <= game_info->wagons[0]  && game_info->board->M[curra][currb].value < game_info->board->M[i][j].value && game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
+                            curra = i;
+                            currb = j;
+                        } 
+                    }
                 }  
                 else if (game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
                     curra = i;
@@ -252,7 +256,9 @@ void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint
     game_info->board->M[cit2][cit1].owner = 1;
     game_info->myCards[playMove->claimRoute.color] -=  game_info->board->M[cit1][cit2].length - playMove->claimRoute.nbLocomotives;
     game_info->myCards[9] -= playMove->claimRoute.nbLocomotives; 
-    game_info->wagons[0] -= game_info->board->M[cit1][cit2].length; 
+    game_info->wagons[0] -= game_info->board->M[cit1][cit2].length;
+    
+    if(game_info->board->M[cit1][cit2].dijktra == 1) printf("QOUAIHDZIAHDIAZHFIAZHFIZARAZIFHIAZHD\n\n\n");
 
     return;
 }
@@ -262,6 +268,10 @@ void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint
 void maj_value(t_game_info * game_info){
     for(int i = 0;i<game_info->board->size;i++){
         for(int j = 0;j<game_info->board->size;j++){
+
+            game_info->board->M[i][j].dijktra = 0;
+            game_info->board->M[j][i].dijktra = 0;
+
             if(game_info->board->M[i][j].owner == -1){
                 game_info->board->M[i][j].value = 0;
                 game_info->board->M[j][i].value = 0;

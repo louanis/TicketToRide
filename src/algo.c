@@ -181,51 +181,70 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
     int * prev = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * step = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * P = (int *)malloc(sizeof(int)*game_info->board->size); 
+    int sort = 0;
     for(int i = 0; i<game_info->board->size;i++){
-        val[i] = (1<<30);
+        val[i] = 0;
         prev[i] = -1;
         step[i] = -1; 
         P[i] = -1;  
     } 
     step[cit1] = 0; 
+    prev[cit1] = -1;
 
     val[cit1] = (uint32) -1; 
     int look_cit = cit1;
-    P[cit1] = 1; 
 
     for(int cacavar = 0;cacavar<9999;cacavar++){
+        printf("OUI OUI LOOK8CIT = %d",look_cit);
         for(int i = 0;i<game_info->board->size;i++){
-            if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
+            if( P[i] == -1 && (val[i] < val[look_cit] + game_info->board->M[i][look_cit].value ) && (game_info->board->M[i][look_cit].length > 0) && (game_info->board->M[i][look_cit].owner >= 0)){
+                printf("QUOICOUBEHHHHHH (%d)\n\n",i);
                 prev[i] = look_cit; 
                 step[i] = step[prev[i]] + 1;  
                 val[i] = val[look_cit] - game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
             } 
 
         } 
+        printf("sss");
 
 
 
 
 
         // Tant qu'il existe un sommet hors de P version jsp quoi
+        sort = 0;
+        int ind_min = -1;
         for(int i = 0; i<game_info->board->size;i++){
             if(P[i] == -1){
-                look_cit = i;
-                continue;
+                sort = 1;
+                if(ind_min == -1 || (game_info->board->M[look_cit][i].value > game_info->board->M[look_cit][ind_min].value && (game_info->board->M[i][look_cit].length > 0) && (game_info->board->M[i][look_cit].owner >= 0))  ) {
+                    ind_min = i;
+                }
             } 
         } 
-        break;
+        if(sort == 0) {
+            printf("JE SORSSSSSSSSSSSSSSSSSSS");
+            break;
+        }else {
+            P[ind_min] = 1;
+            look_cit = ind_min;
+        }
     } 
     
     maj_value(game_info);
     maj_value_card(game_info);
     int curr_upd = cit2;
+    printf("OBJ : %d -> %d",cit1,cit2);
+    for(int i = 0;i<game_info->board->size;i++) printf("//%d : %d//",i,prev[i]);
+    printf("\n");
     for(int cacavar = 0;cacavar<9999;cacavar++){
-        if(curr_upd == cit1 || curr_upd < 0){
+        if(curr_upd < 0){
             break;
         } 
 
         if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
+        game_info->board->M[curr_upd][prev[curr_upd]].dijktra = 1;
+        printf("(((%d)))-",curr_upd);
         curr_upd = prev[curr_upd]; 
 
     } 
