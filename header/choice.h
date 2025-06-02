@@ -10,5 +10,8 @@ int min_presence_col(t_game_info * game_info, int threshold);
 void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint32 cit2);
 void maj_value(t_game_info * game_info);
 void maj_value_card(t_game_info * game_info);
+int biggest_col_majoration(t_game_info * game_info);
+void maj_biggest_per_col(t_game_info * game_info);
+uint32 choose_biggest_color(t_game_info *game_info, int min, int col);
 
 #endif

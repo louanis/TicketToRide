@@ -59,8 +59,9 @@ typedef struct t_game_info_{
     int playerReplay;
     int myNumber;
     BoardState visibleCards;
-    t_track bestTracks[10];
     int myCards[10]; //The cards will be set to 0 and the 0th element will stay 0 forever to not burden myself with verification of color index later on
+    int maxSizeCol[10]; //For each color there will be the size of the biggest track of that color
+    int cardToPick[10]; //Do i need to pick this card currently ? 1 yes 0 no 
     int availableCardsMajoration[10];
     uint32 chosenCol; //The color i chose to focus on, if &(1<<x) >0 then i am focusing on the x color
     int wagons[2]; //wagons[0] my wagons, wagons[1] opp wagons,  
