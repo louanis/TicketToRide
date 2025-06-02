@@ -30,17 +30,63 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
             return 1;
         } 
         
-        uint32 road = choose_biggest(game_info,6); 
-        if(road == 0){
-            road = choose_biggest(game_info,5);
+
+        if(game_info->wagons[0] == 0 || game_info->wagons[0] == 1){  
+            playMove->action = 2;
+            return 2;
         } 
-        if(road == 0){
-            road = choose_biggest(game_info,4);
+
+        int curra,currb;
+        int start = 1;
+        for(int i = 0;i<game_info->board->size;i++){
+           for(int j = 0;j<game_info->board->size;j++){
+                if(i == j){
+                    continue;
+                }
+
+                if(start != 1){
+                    if(game_info->board->M[i][j].value <= game_info->wagons[0]  &&game_info->board->M[curra][currb].value < game_info->board->M[i][j].value && game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
+                        curra = i;
+                        currb = j;
+                    } 
+                }  
+                else if (game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
+                    curra = i;
+                    currb = j;
+                    start = 0;
+                } 
+                
+            }  
         } 
-        if(road != (uint32) 0){
-            build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
-            return 1;
+        printf("((((((((((((((((((((((((((((((((((%d,%d))))))))))))))))))))))))))))))))))",curra,currb);
+        if(is_placable(game_info,&game_info->board->M[curra][currb]) >0){
+            build_route(game_info,playMove,curra,currb);
+            return 1;       
+        }else if(game_info->board->M[curra][currb].col2 == 0){
+
+            if(is_in(game_info->board->M[curra][currb].col1,(int*)&game_info->visibleCards,5) && game_info->board->M[curra][currb].col1 != 9){
+                playMove->action = 3; // Draw a face-up card
+                playMove->drawCard = game_info->board->M[curra][currb].col1 ;
+                return 3;
+            } 
+        } else{
+            if(game_info->myCards[game_info->board->M[curra][currb].col1] > game_info->myCards[game_info->board->M[curra][currb].col2]){
+                if(is_in(game_info->board->M[curra][currb].col1,(int*)&game_info->visibleCards,5) && game_info->board->M[curra][currb].col1 != 9){
+                playMove->action = 3; // Draw a face-up card
+                playMove->drawCard = game_info->board->M[curra][currb].col1 ;
+                return 3;
+                } 
+            } else{
+                if(is_in(game_info->board->M[curra][currb].col2,(int*)&game_info->visibleCards,5) && game_info->board->M[curra][currb].col1 != 9){
+                playMove->action = 3; // Draw a face-up card
+                playMove->drawCard = game_info->board->M[curra][currb].col2 ;
+                return 3;
+                } 
+            } 
         } 
+
+        playMove->action = 2;
+        return 2;
     } 
 
     // /*----
@@ -97,8 +143,10 @@ int chose_obj(t_game_info * game_info, MoveData * myMove, MoveResult * mresult){
             max = i;
         } 
         myMove->chooseObjectives[i] = 1;
+        game_info->obj[i] = (mresult->objectives[i].from<<16) + mresult->objectives[i].to;
     }
     myMove->chooseObjectives[max] = 0;
+    game_info->not_chosen_obj = max;
     return 1;
 }
 
@@ -227,8 +275,8 @@ void maj_value(t_game_info * game_info){
                 game_info->board->M[j][i].value = 0;
             } 
             else{
-                game_info->board->M[i][j].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
-                game_info->board->M[j][i].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[i][j].value = score(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[j][i].value = score(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
             } 
         } 
     } 

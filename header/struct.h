@@ -69,6 +69,8 @@ typedef struct t_game_info_{
     int oppCardCounter;
     char * magic_word;
     int magic_number;
+    int obj[3]; // cit1<<16+cit2 for each element of the array
+    int not_chosen_obj; 
 }t_game_info;
 
 

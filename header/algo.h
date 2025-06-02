@@ -10,5 +10,6 @@ uint32 cost_track(t_game_info * game_info, t_track * track, int dist_from_start)
 void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2, int (*track_value_dijktra)(const void *, int));
 t_track * uint_city_to_track(t_game_info * game_info, uint32 cit);
 void open_website_part(char *magic_word);
+void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2);
 
 #endif

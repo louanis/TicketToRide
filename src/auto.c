@@ -35,6 +35,13 @@ void auto_loop(t_game_info * game_info){
             open_website_part(game_info->magic_word);
             break;
         }  
+        
+        maj_value(game_info);
+        maj_value_card(game_info);
+        for(int i = 0;i<3;i++){
+            if(i==game_info->not_chosen_obj) continue;
+            maj_value_dijktra(game_info,game_info->obj[i]&0xFFFF,game_info->obj[i]>>16);
+        } 
 		if(game_info->playerTurn == 1){
             if(replay == 0){
                 move_count += 1;

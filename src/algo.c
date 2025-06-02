@@ -177,7 +177,7 @@ void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2
 
 
 void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
-    uint32 * val = (uint32 *)malloc(sizeof(uint32)*game_info->board->size); 
+    uint32 * val = malloc(sizeof(int)*game_info->board->size);
     int * prev = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * step = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * P = (int *)malloc(sizeof(int)*game_info->board->size); 
@@ -191,13 +191,9 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
 
     val[cit1] = (uint32) -1; 
     int look_cit = cit1;
-    int curr_cit = 0;
-    if(cit1 == 0){
-        curr_cit = 1;
-    } 
     P[cit1] = 1; 
 
-    for(int ___;___<9999;___++){
+    for(int cacavar = 0;cacavar<9999;cacavar++){
         for(int i = 0;i<game_info->board->size;i++){
             if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
                 prev[i] = look_cit; 
@@ -220,13 +216,12 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
         } 
         break;
     } 
-
     
-    void maj_value(game_info);
-    void maj_value_card(game_info);
+    maj_value(game_info);
+    maj_value_card(game_info);
     int curr_upd = cit2;
-    for(int ___;___<9999;___++){
-        if(curr_upd == cit1){
+    for(int cacavar = 0;cacavar<9999;cacavar++){
+        if(curr_upd == cit1 || curr_upd < 0){
             break;
         } 
 
@@ -234,4 +229,9 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
         curr_upd = prev[curr_upd]; 
 
     } 
+    
+    free(val);
+    free(prev);
+    free(step);
+    free(P);
 } 
