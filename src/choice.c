@@ -59,7 +59,7 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
             }  
         } 
         printf("((((((((((((((((((((((((((((((((((%d,%d))))))))))))))))))))))))))))))))))",curra,currb);
-        if(is_placable(game_info,&game_info->board->M[curra][currb]) >0){
+        if(is_placable(game_info,&game_info->board->M[curra][currb]) >0 && game_info->board->M[curra][currb].length <= game_info->wagons[0]){
             build_route(game_info,playMove,curra,currb);
             return 1;       
         }else if(game_info->board->M[curra][currb].col2 == 0){
