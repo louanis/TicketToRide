@@ -5,6 +5,11 @@
 int chose_move(t_game_info * game_info, MoveData * playMove){ 
 
     if(game_info->playerReplay == 0){  
+        if(is_placable(game_info,&game_info->board->M[22][17]) >0){
+            build_route(game_info,playMove,22,17);
+            return 1;
+        } 
+
         if(is_placable(game_info,&game_info->board->M[22][23]) >0){
             build_route(game_info,playMove,22,23);
             return 1;
@@ -25,17 +30,19 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
             return 1;
         } 
 
-        if(is_placable(game_info,&game_info->board->M[22][17]) >0){
-            build_route(game_info,playMove,22,17);
-            return 1;
-        } 
         
         uint32 road = choose_biggest(game_info,6); 
         if(road == 0){
+
+
+            //TODO : si aucun 6 posable pour l'instant et qu'une couleur est en presence de 5, poser une route de cette couleur 
+
+
+
+            playMove->action = 2;
+            return 2; 
+
             road = choose_biggest(game_info,5);
-        } 
-        if(road == 0){
-            road = choose_biggest(game_info,4);
         } 
         if(road != (uint32) 0){
             build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
