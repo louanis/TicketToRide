@@ -190,14 +190,10 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
     step[cit1] = 0; 
 
     val[cit1] = (uint32) -1; 
-    int look_cit = cit1;
-    int curr_cit = 0;
-    if(cit1 == 0){
-        curr_cit = 1;
-    } 
+    int look_cit = cit1; 
     P[cit1] = 1; 
 
-    for(int ___;___<9999;___++){
+    for(int ___ = 0;___<9999;___++){
         for(int i = 0;i<game_info->board->size;i++){
             if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
                 prev[i] = look_cit; 
@@ -222,10 +218,10 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
     } 
 
     
-    void maj_value(game_info);
-    void maj_value_card(game_info);
+    maj_value(game_info);
+    maj_value_card(game_info);
     int curr_upd = cit2;
-    for(int ___;___<9999;___++){
+    for(int ___ = 0;___<9999;___++){
         if(curr_upd == cit1){
             break;
         } 
