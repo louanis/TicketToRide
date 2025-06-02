@@ -45,7 +45,6 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
                 }
 
                 if(start != 1){
-                    printf(";%d;",game_info->board->M[curra][currb].dijktra);
 
                     if(game_info->board->M[curra][currb].dijktra <= game_info->board->M[i][j].dijktra) {
                         if(game_info->board->M[i][j].value <= game_info->wagons[0]  && game_info->board->M[curra][currb].value < game_info->board->M[i][j].value && game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
@@ -62,7 +61,6 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
                 
             }  
         } 
-        printf("((((((((((((((((((((((((((((((((((%d,%d))))))))))))))))))))))))))))))))))",curra,currb);
         if(is_placable(game_info,&game_info->board->M[curra][currb]) >0 && game_info->board->M[curra][currb].length <= game_info->wagons[0]){
             build_route(game_info,playMove,curra,currb);
             return 1;       
@@ -285,8 +283,8 @@ void maj_value(t_game_info * game_info){
                 game_info->board->M[j][i].value = 0;
             } 
             else{
-                game_info->board->M[i][j].value = score(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
-                game_info->board->M[j][i].value = score(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[i][j].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[j][i].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
             } 
         } 
     } 
