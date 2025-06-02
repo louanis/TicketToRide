@@ -176,3 +176,62 @@ void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2
 }
 
 
+void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
+    uint32 * val = (uint32 *)malloc(sizeof(uint32)*game_info->board->size); 
+    int * prev = (int *)malloc(sizeof(int)*game_info->board->size); 
+    int * step = (int *)malloc(sizeof(int)*game_info->board->size); 
+    int * P = (int *)malloc(sizeof(int)*game_info->board->size); 
+    for(int i = 0; i<game_info->board->size;i++){
+        val[i] = (1<<30);
+        prev[i] = -1;
+        step[i] = -1; 
+        P[i] = -1;  
+    } 
+    step[cit1] = 0; 
+
+    val[cit1] = (uint32) -1; 
+    int look_cit = cit1;
+    int curr_cit = 0;
+    if(cit1 == 0){
+        curr_cit = 1;
+    } 
+    P[cit1] = 1; 
+
+    for(int ___;___<9999;___++){
+        for(int i = 0;i<game_info->board->size;i++){
+            if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
+                prev[i] = look_cit; 
+                step[i] = step[prev[i]] + 1;  
+                val[i] = val[look_cit] + game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
+            } 
+
+        } 
+
+
+
+
+
+        // Tant qu'il existe un sommet hors de P version jsp quoi
+        for(int i = 0; i<game_info->board->size;i++){
+            if(P[i] == -1){
+                look_cit = i;
+                continue;
+            } 
+        } 
+        break;
+    } 
+
+    
+    void maj_value(game_info);
+    void maj_value_card(game_info);
+    int curr_upd = cit2;
+    for(int ___;___<9999;___++){
+        if(curr_upd == cit1){
+            break;
+        } 
+
+        game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
+        curr_upd = prev[curr_upd]; 
+
+    } 
+} 

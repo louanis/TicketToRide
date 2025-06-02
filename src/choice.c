@@ -216,11 +216,34 @@ void maj_value(t_game_info * game_info){
         for(int j = 0;j<game_info->board->size;j++){
             if(game_info->board->M[i][j].owner == -1){
                 game_info->board->M[i][j].value = 0;
+                game_info->board->M[j][i].value = 0;
             } 
             else if (game_info->board->M[i][j].owner == 1){
                 game_info->board->M[i][j].value = (uint32) -1;
-            } else{
+                game_info->board->M[j][i].value = (uint32) -1;
+            } 
+            else if (game_info->board->M[i][j].owner == -2){
+                game_info->board->M[i][j].value = 0;
+                game_info->board->M[j][i].value = 0;
+            } 
+            else{
                 game_info->board->M[i][j].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[j][i].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
+            } 
+        } 
+    } 
+} 
+
+
+void maj_value_card(t_game_info * game_info){
+
+    for(int i = 0;i<game_info->board->size;i++){
+        for(int j = 0;j<game_info->board->size;j++){
+            if (game_info->board->M[i][j].owner == 0){
+                if(is_placable(game_info,&game_info->board->M[i][j]) > 0){
+                    game_info->board->M[i][j].value += WEIGHT_POSABLE;
+                    game_info->board->M[j][i].value += WEIGHT_POSABLE;
+                } 
             } 
         } 
     } 
