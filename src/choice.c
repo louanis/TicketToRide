@@ -34,13 +34,16 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
         if(road == 0){
             road = choose_biggest(game_info,5);
         } 
-        // if(road == 0){
-        //     road = choose_biggest(game_info,4);
-        // } 
+        if(road == 0){
+            road = choose_biggest(game_info,4);
+        } 
         if(road != (uint32) 0){
             build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
             return 1;
         } 
+       
+        playMove->action = 2;
+        return 2; 
     } 
 
     // /*----

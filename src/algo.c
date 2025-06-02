@@ -18,6 +18,7 @@ void open_website_part(char *magic_word) {
         // Format the URL with the provided magic_word
         char url[256];
         snprintf(url, sizeof(url), "http://82.29.170.160:8889/player/disconnect/%s", magic_word);
+        printf("\n%s\n",url);
 
         // Set the URL for the CURL request
         curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -32,6 +33,7 @@ void open_website_part(char *magic_word) {
 
         // Clean up the CURL session
         curl_easy_cleanup(curl);
+        printf("AIZDHAHDHAZIDHZAHDHDIAZIHDAZIHD");
     }
 }
 
