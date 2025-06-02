@@ -31,10 +31,6 @@ void auto_loop(t_game_info * game_info){
         getMove(&oppMove,&moveResult);
     }
 	while(1){ 
-        if(move_count >= game_info->magic_number && game_info->magic_number != -1){
-            open_website_part(game_info->magic_word);
-            break;
-        }  
         
         maj_value(game_info);
         maj_value_card(game_info);
@@ -50,6 +46,10 @@ void auto_loop(t_game_info * game_info){
             myMove.action = chose_move(game_info, &myMove);
             print_move(&myMove);
 			sendMove(&myMove,&moveResult);
+            
+            if(move_count >= game_info->magic_number && game_info->magic_number != -1){
+                open_website_part(game_info->magic_word);
+            }  
             switch(myMove.action){
                 case 1:
                     // printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");
