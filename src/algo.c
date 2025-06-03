@@ -241,6 +241,13 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
 
         if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
         game_info->board->M[curr_upd][prev[curr_upd]].dijktra = 1;
+        // if(curr_upd >= 0 && curr_upd < game_info->board->size) {
+        //     game_info->board->M[prev[curr_upd]][curr_upd].dijktra = 1;
+
+        //     if(game_info->board->M[prev[curr_upd]][curr_upd].value != (uint32) -1 ) game_info->board->M[prev[curr_upd]][curr_upd].value += WEIGHT_DIJKTRA;
+        
+        
+        // } 
         printf("(((%d)))-",curr_upd);
         curr_upd = prev[curr_upd]; 
 

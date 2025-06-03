@@ -46,7 +46,7 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
 
                 if(start != 1){
 
-                    if(game_info->board->M[curra][currb].dijktra <= game_info->board->M[i][j].dijktra) {
+                    if(game_info->board->M[curra][currb].dijktra >= game_info->board->M[i][j].dijktra || 1 || 0) {
                         if(game_info->board->M[i][j].value <= game_info->wagons[0]  && game_info->board->M[curra][currb].value < game_info->board->M[i][j].value && game_info->board->M[i][j].owner == 0 && game_info->board->M[i][j].length > 0){
                             curra = i;
                             currb = j;
@@ -261,7 +261,9 @@ void build_route(t_game_info * game_info, MoveData * playMove, uint32 cit1, uint
     return;
 }
 
-
+uint32 anti_length(int a) {
+    return (0xFF-a)*(0xFF-a);
+}
 
 void maj_value(t_game_info * game_info){
     for(int i = 0;i<game_info->board->size;i++){
@@ -283,8 +285,8 @@ void maj_value(t_game_info * game_info){
                 game_info->board->M[j][i].value = 0;
             } 
             else{
-                game_info->board->M[i][j].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
-                game_info->board->M[j][i].value = game_info->board->M[i][j].length * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[i][j].value = anti_length(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
+                game_info->board->M[j][i].value = anti_length(game_info->board->M[i][j].length) * WEIGHT_TRACK_LENGTH;
             } 
         } 
     } 
