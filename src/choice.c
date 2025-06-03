@@ -3,78 +3,60 @@
 #include "../header/all.h"
 
 int chose_move(t_game_info * game_info, MoveData * playMove){ 
-
+    
+    maj_biggest_per_col(game_info);
+    int col = biggest_col_majoration(game_info);
+    uint32 road = choose_biggest_color(game_info,game_info->maxSizeCol[col],col);
+        
     if(game_info->playerReplay == 0){  
-        // if(is_placable(game_info,&game_info->board->M[22][17]) >0){
-            // build_route(game_info,playMove,22,17);
-            // return 1;
-        // } 
-// 
-        // if(is_placable(game_info,&game_info->board->M[22][23]) >0){
-            // build_route(game_info,playMove,23,22);
-            // return 1;
-        // } 
-// 
-        // if(is_placable(game_info,&game_info->board->M[0][1]) >0){
-            // build_route(game_info,playMove,1,0);
-            // return 1;
-        // } 
-// 
-        // if(is_placable(game_info,&game_info->board->M[1][2]) >0){
-            // build_route(game_info,playMove,2,1);
-            // return 1;
-        // } 
-// 
-        // if(is_placable(game_info,&game_info->board->M[16][17]) >0){
-            // build_route(game_info,playMove,17,16);
-            // return 1;
-        // } 
-
-        
-        maj_biggest_per_col(game_info);
-        int col = biggest_col_majoration(game_info);
-        uint32 road = choose_biggest_color(game_info,game_info->maxSizeCol[col],col);
-
-        
-        if(road != (uint32) 0){
-            build_route(game_info,playMove,road>>16,road&~(0xFFFF0000));
+      
+        if(col != 0 && road != (uint32) 0 && is_placable(game_info,&game_info->board->M[MAX(road>>16,road&(0xFFFF))][MIN(road>>16,road&(0xFFFF))]) > 0){
+            build_route(game_info,playMove,road>>16,road&(0xFFFF));
             return 1;
         } 
-
+    }
+    for(int i = 0;i<9;i++) game_info->cardToPick[i] = 0;
+    
+    for(int i = 1;i<9;i++) {
+        maj_card_to_pick(game_info);
+        int we_pick = 0;
+        for(int i = 0;i<5;i++) {
+            int ind_c = game_info->visibleCards.card[i];
+            for(int i = 1;i<9;i++) {
+                if(game_info->cardToPick[ind_c] == 1) {
+                    we_pick = ind_c;
+                    break;
+                }
+            }
+            if(we_pick > 0) break;
+        }
         
+        if(we_pick > 0) {
+            printf("\n\n\n\n\n\n\n\n\n\n\n\n");
+
+            playMove->action = 3; 
+            playMove->drawCard = we_pick ;
+            return 3;
+        }
+    }
+    
+    playMove->action = 2;
+    return 2; 
+    uint32 road2 = choose_biggest(game_info,6); 
+    if(road2 == 0){
+        //TODO : si aucun 6 posable pour l'instant et qu'une couleur est en presence de 5, poser une route de cette couleur 
         playMove->action = 2;
         return 2; 
-
-
-
-
-
-
-
-
-
-
-        uint32 road2 = choose_biggest(game_info,6); 
-        if(road2 == 0){
-
-
-            //TODO : si aucun 6 posable pour l'instant et qu'une couleur est en presence de 5, poser une route de cette couleur 
-
-
-
-            playMove->action = 2;
-            return 2; 
-
-            road = choose_biggest(game_info,5);
-        } 
-        if(road != (uint32) 0){
-            build_route(game_info,playMove,road2>>16,road2&~(0xFFFF0000));
-            return 1;
-        } 
-       
-        playMove->action = 2;
-        return 2; 
+        road = choose_biggest(game_info,5);
     } 
+    if(road != (uint32) 0){
+        build_route(game_info,playMove,road2>>16,road2&~(0xFFFF0000));
+        return 1;
+    } 
+    
+    playMove->action = 2;
+    return 2; 
+
 
     // /*----
     // Choose the best face-up card to build the biggest route*/
@@ -207,11 +189,25 @@ uint32 choose_biggest_color(t_game_info *game_info, int min, int col) {
                 int isPriority = connectedCities[i] || connectedCities[j];
 
                 // Prioritize tracks that connect to already connected cities
-                if ((isPriority && currsize <= currtrack.length) || (!isPriority && currsize < currtrack.length)) {
-                    if (currtrack.length >= min && currtrack.length <= game_info->wagons[0] && (currtrack.col1 == col || currtrack.col2 == col)) {
-                        currsize = currtrack.length;
-                        retcit = (i << 16) + j;
+                if(col != 9) {
+                    
+                    if ((isPriority && currsize <= currtrack.length) || (!isPriority && currsize < currtrack.length)) {
+                        if (currtrack.length >= min && currtrack.length <= game_info->wagons[0] && (currtrack.col1 == col || currtrack.col2 == col)) {
+                            currsize = currtrack.length;
+                            retcit = (i << 16) + j;
+                        }
                     }
+
+                }else {
+
+                    
+                    if ((isPriority && currsize <= currtrack.length) || (!isPriority && currsize < currtrack.length)) {
+                        if (currtrack.length >= min && currtrack.length <= game_info->wagons[0] && (currtrack.col1 == col || currtrack.col2 == col)) {
+                            currsize = currtrack.length;
+                            retcit = (i << 16) + j;
+                        }
+                    }
+                    
                 }
             }
         }
@@ -314,8 +310,8 @@ void maj_biggest_per_col(t_game_info * game_info){
             int col1 = game_info->board->M[i][j].col1;
             int col2 = game_info->board->M[i][j].col2;
             if ((game_info->board->M[i][j].owner == 0)){
-                game_info->maxSizeCol[col1] = MAX(game_info->maxSizeCol[col1],game_info->board->M[i][j].length);
-                game_info->maxSizeCol[col2] = MAX(game_info->maxSizeCol[col2],game_info->board->M[i][j].length);
+                game_info->maxSizeCol[col1] = MIN(game_info->wagons[0], MAX(game_info->maxSizeCol[col1],game_info->board->M[i][j].length) );
+                game_info->maxSizeCol[col2] = MIN(game_info->wagons[0], MAX(game_info->maxSizeCol[col2],game_info->board->M[i][j].length) );
             } 
         } 
     } 
@@ -324,8 +320,8 @@ void maj_biggest_per_col(t_game_info * game_info){
 int biggest_col_majoration(t_game_info * game_info){ //Ret 0 if none fullfil the conditions, else the color that fulfill it
     int deb = 1; 
     int ret = 0;
-    for(int i = 0;i<10;i++){
-        if(game_info->myCards[i] >= game_info->maxSizeCol[i]){
+    for(int i = 0;i<9;i++){
+        if(game_info->myCards[i] >= game_info->maxSizeCol[i] && game_info->myCards[i] >= game_info->maxSizeCol[9]){
             if(deb == 1){
                 deb = 0;
                 ret = i;
@@ -337,7 +333,43 @@ int biggest_col_majoration(t_game_info * game_info){ //Ret 0 if none fullfil the
         } 
     } 
 
+    if(ret == 0) {
+        for(int i = 0;i<9;i++){
+        if(game_info->myCards[i] >= game_info->maxSizeCol[9]){
+            if(deb == 1){
+                deb = 0;
+                ret = i;
+            } else{
+                if(game_info->maxSizeCol[i]>game_info->maxSizeCol[9]){
+                    ret = i;
+                } 
+            } 
+        } 
+    } 
+
+    }
     return ret;
 } 
 
 
+void maj_card_to_pick(t_game_info * game_info) { 
+    int curr_min = 0xFFF;
+    int curr_max = 0;
+    int ind = 0;
+    for(int i = 1 ; i<9; i++) {
+        if(game_info->cardToPick[i] == 2) continue;
+        else if(game_info->cardToPick[i] == 1) game_info->cardToPick[i] = 2;
+    }
+    for(int i = 1; i<9 ; i++) {
+        if(game_info->cardToPick[i] == 0) {
+
+            if((game_info->availableCardsMajoration[i] - game_info->myCards[i] <= curr_min) && game_info->availableCardsMajoration[i] >= curr_max) {
+                game_info->cardToPick[ind] = 0;
+                game_info->cardToPick[i] = 1; 
+                ind = i;
+                curr_min = game_info->availableCardsMajoration[i] - game_info->myCards[i];
+                curr_max = game_info->availableCardsMajoration[i];
+            }   
+        }
+    }
+}

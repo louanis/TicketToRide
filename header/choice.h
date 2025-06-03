@@ -13,5 +13,6 @@ void maj_value_card(t_game_info * game_info);
 int biggest_col_majoration(t_game_info * game_info);
 void maj_biggest_per_col(t_game_info * game_info);
 uint32 choose_biggest_color(t_game_info *game_info, int min, int col);
+void maj_card_to_pick(t_game_info * game_info);
 
 #endif
