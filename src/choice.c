@@ -9,6 +9,24 @@ int chose_move(t_game_info * game_info, MoveData * playMove){
     uint32 road = choose_biggest_color(game_info,game_info->maxSizeCol[col],col);
         
     if(game_info->playerReplay == 0){  
+
+        uint32 roadBIG = choose_biggest(game_info,6); 
+        if(roadBIG != 0 && is_placable(game_info,&game_info->board->M[roadBIG>>16][roadBIG&(0xFFFF)])>0) {
+            build_route(game_info,playMove,roadBIG>>16,roadBIG&(0xFFFF));
+            return 1;
+        }
+        if(game_info->wagons[0] <= 5){
+            uint32 road2 = choose_biggest(game_info,2); 
+            if(road2 != 0 && is_placable(game_info,&game_info->board->M[road2>>16][road2&(0xFFFF)])>0) {
+                build_route(game_info,playMove,road2>>16,road2&(0xFFFF));
+                return 1;
+            }
+            road2 = choose_biggest(game_info,1); 
+            if(road2 != 0 && is_placable(game_info,&game_info->board->M[road2>>16][road2&(0xFFFF)])>0) {
+                build_route(game_info,playMove,road2>>16,road2&(0xFFFF));
+                return 1;
+            }
+        } 
       
         if(col != 0 && road != (uint32) 0 && is_placable(game_info,&game_info->board->M[MAX(road>>16,road&(0xFFFF))][MIN(road>>16,road&(0xFFFF))]) > 0){
             build_route(game_info,playMove,road>>16,road&(0xFFFF));

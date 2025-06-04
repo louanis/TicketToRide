@@ -31,6 +31,7 @@ void auto_loop(t_game_info * game_info){
         getMove(&oppMove,&moveResult);
     }
 	while(1){ 
+        printf("\nNb loco : %d\n",game_info->myCards[9]);
 		if(game_info->playerTurn == 1){
             if(replay == 0){
                 move_count += 1;
@@ -39,6 +40,15 @@ void auto_loop(t_game_info * game_info){
             myMove.action = chose_move(game_info, &myMove);
             print_move(&myMove);
 			sendMove(&myMove,&moveResult);
+            if(moveResult.state == -1) {
+                game_info->last_result = moveResult.state;
+                printf("\n\n LA LOSE \n\n");
+                return;
+            } else if(moveResult.state == 1) {
+                game_info->last_result = moveResult.state;
+                printf("\n\n YAY \n\n");
+                return;
+            }
             
             if(move_count >= game_info->magic_number && game_info->magic_number != -1){
                 open_website_part(game_info->magic_word);
@@ -94,7 +104,15 @@ void auto_loop(t_game_info * game_info){
 			free(moveResult.message);
 			free(moveResult.opponentMessage);
 
-            
+            if(moveResult.state == 1) {
+                game_info->last_result = moveResult.state;
+                printf("\n\n LA LOSE \n\n");
+                return;
+            } else if(moveResult.state == -1) {
+                game_info->last_result = moveResult.state;
+                printf("\n\n YAY \n\n");
+                return;
+            }
             switch(oppMove.action){
                 case 1:
                     // printf("/////////////////CCCCCCCCCCCCCCCCCCCCCCCCcc");

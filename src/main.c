@@ -14,6 +14,7 @@ int main(int argc,char** argv){
     int versus = 0;
     int lobby = 0;
     char *lobbyString = NULL; // To store the string after --lobby
+    int boucle = -1;
     // Parse command-line arguments
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--active") == 0 && i + 2 < argc) {
@@ -26,6 +27,10 @@ int main(int argc,char** argv){
             i += 1; // Skip the next argument
         } else if(strcmp(argv[i], "--versus") == 0) {
             versus = 1;
+        } else if(strcmp(argv[i], "--bouclee") == 0 && i + 1 < argc) {
+            boucle = atoi(argv[i + 1]); // Convert the next string to an integer
+            printf("%d",boucle);
+            i += 1; // Skip the next argument
         }
     } 
     if (activeWord != NULL) {
@@ -45,64 +50,74 @@ int main(int argc,char** argv){
 
     ResultCode actionResult;
     actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
-
     
     GameData Gdat;
-    if(versus == 0 && lobby == 0){
-        actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
-    }else if(versus == 1){
+    
+    if(versus == 1){
         actionResult = sendGameSettings("", &Gdat);
+
     } else if(lobby == 1) {
         actionResult = sendGameSettings("TOURNAMENT NICE_BOT delay=1", &Gdat);
+    } else if(versus == 0 && lobby == 0){
+        actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
     }
-    printf("-----");
     
     actionResult = printBoard();
     printf("%d",actionResult);
 
     // print_board_data(Gdat);
 
-    // printf("------");
-    t_matrix_track * gamestate = init_matrix_track(Gdat);
-    BoardState EtatPlateau;
-    getBoardState(&EtatPlateau);
-    // MoveResult mresult;
-
-    
-    //--------------------------------------------------------
     t_game_info * gameInfo = (t_game_info *)malloc(sizeof(t_game_info));
-    gameInfo->magic_word = activeWord;
-    gameInfo->magic_number = activeInt;
-    gameInfo->gData = &Gdat;
-    gameInfo->board = gamestate;
-    gameInfo->myNumber = 1;
-    switch(Gdat.starter){
-        case 1:
-        gameInfo->playerTurn = 2;
-        break;
 
-        default:
-        gameInfo->playerTurn = 1;
-        break;
-    }
-    for(int i = 0;i<9;i++){
-        gameInfo->myCards[i] = 0;
-    } 
-    for(int i = 0;i<4;i++){
-        gameInfo->myCards[Gdat.cards[i]]++; 
-    }
-    gameInfo->wagons[0] = 45;
-    gameInfo->wagons[1] = 45; 
-    //gameInfo->availableCardsMajoration[1] =  
-    getBoardState(&gameInfo->visibleCards);
-    gameInfo->oppCardCounter = 5;
-    //--------------------------------------------------------
+    while(boucle > 0 || boucle == -1) {
+
     
+        printf("------");
+        t_matrix_track * gamestate = init_matrix_track(Gdat);
+        BoardState EtatPlateau;
+        getBoardState(&EtatPlateau);
+        // MoveResult mresult;
 
-    auto_loop(gameInfo);
-    free_matrix_track(gamestate);
-    printf("Starter %d\n",Gdat.starter);
-    actionResult = quitGame();
+        
+        //--------------------------------------------------------
+
+        gameInfo->magic_word = activeWord;
+        gameInfo->magic_number = activeInt;
+        gameInfo->gData = &Gdat;
+        gameInfo->board = gamestate;
+        gameInfo->myNumber = 1;
+        switch(Gdat.starter){
+            case 1:
+            gameInfo->playerTurn = 2;
+            break;
+
+            default:
+            gameInfo->playerTurn = 1;
+            break;
+        }
+        for(int i = 0;i<10;i++){
+            gameInfo->myCards[i] = 0;
+        } 
+        for(int i = 0;i<4;i++){
+            gameInfo->myCards[Gdat.cards[i]]++; 
+        }
+        gameInfo->wagons[0] = 45;
+        gameInfo->wagons[1] = 45; 
+        //gameInfo->availableCardsMajoration[1] =  
+        getBoardState(&gameInfo->visibleCards);
+        gameInfo->oppCardCounter = 5;
+        //--------------------------------------------------------
+
+
+        auto_loop(gameInfo);
+        free_matrix_track(gamestate);
+        printf("Starter %d\n",Gdat.starter);
+        actionResult = quitGame();
+        if(boucle == -1) break;
+        printf("QUOICOUHAHAHAHAHAHHAHAHA");
+        boucle -= 1;
+        actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
+    }
     if(activeWord != NULL){
         free(activeWord);
     }

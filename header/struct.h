@@ -70,6 +70,7 @@ typedef struct t_game_info_{
     int oppCardCounter;
     char * magic_word;
     int magic_number;
+    int last_result;
 }t_game_info;
 
 
