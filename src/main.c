@@ -50,16 +50,25 @@ int main(int argc,char** argv){
 
     ResultCode actionResult;
     actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
-    
+    FILE * f;
+
     GameData Gdat;
     
     if(versus == 1){
         actionResult = sendGameSettings("", &Gdat);
 
     } else if(lobby == 1) {
-        actionResult = sendGameSettings("TOURNAMENT NICE_BOT delay=1", &Gdat);
+        char tourn[256]; 
+        boucle = -2;
+        if(lobbyString != NULL){
+            snprintf(tourn, sizeof(tourn), "TOURNAMENT %s", lobbyString);
+        } else {
+            tourn[0] = '\0'; // fallback to empty string if lobbyString is NULL
+        }
+        actionResult = sendGameSettings(tourn, &Gdat);
     } else if(versus == 0 && lobby == 0){
         actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
+        f = fopen("./data/vsNiceBot.txt","a");
     }
     
     actionResult = printBoard();
@@ -69,7 +78,8 @@ int main(int argc,char** argv){
 
     t_game_info * gameInfo = (t_game_info *)malloc(sizeof(t_game_info));
 
-    while(boucle > 0 || boucle == -1) {
+
+    while(boucle >= 0 || boucle == -1 || lobby == 1) {
 
     
         printf("------");
@@ -110,14 +120,48 @@ int main(int argc,char** argv){
 
 
         auto_loop(gameInfo);
+        if(f != NULL){
+            fprintf(f,"%d\n",gameInfo->last_result);
+        } 
         free_matrix_track(gamestate);
         printf("Starter %d\n",Gdat.starter);
-        actionResult = quitGame();
-        if(boucle == -1) break;
+        if(boucle == -1|| boucle == 0 ) break;
         printf("QUOICOUHAHAHAHAHAHHAHAHA");
         boucle -= 1;
-        actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
+        if(versus == 1){
+            actionResult = sendGameSettings("", &Gdat);
+        } else if(lobby == 1) {
+            
+        } else if(versus == 0 && lobby == 0){
+            actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
+        }
+        
     }
+    if(f != NULL){
+        fclose(f);
+        f = fopen("./data/vsNiceBot.txt","r");
+        int compteurtot = 0;
+        int compteurwin = 0;
+        int ca;
+        while(feof(f) == 0){
+            fscanf(f,"%d\n",&ca);
+            compteurtot++;
+            switch(ca){
+                case 1:
+                compteurwin ++;
+                break;
+                default:
+                break;
+            } 
+
+        } 
+        FILE * fwr = fopen("./data/currWr.txt","w");
+        float wr = (1.0*compteurwin)/(compteurtot*1.0);
+        fprintf(fwr,"%f",wr);
+        fclose(fwr);
+        fclose(f);
+    } 
+    actionResult = quitGame();
     if(activeWord != NULL){
         free(activeWord);
     }
