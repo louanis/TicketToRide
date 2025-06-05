@@ -179,28 +179,30 @@ void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2
 
 
 void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
-    uint32 * val = (uint32 *)malloc(sizeof(uint32)*game_info->board->size); 
+    uint32 * val = malloc(sizeof(int)*game_info->board->size);
     int * prev = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * step = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * P = (int *)malloc(sizeof(int)*game_info->board->size); 
+    int sort = 0;
     for(int i = 0; i<game_info->board->size;i++){
-        val[i] = (1<<30);
+        val[i] = 0;
         prev[i] = -1;
         step[i] = -1; 
         P[i] = -1;  
     } 
     step[cit1] = 0; 
+    prev[cit1] = -1;
 
     val[cit1] = (uint32) -1; 
-    int look_cit = cit1; 
-    P[cit1] = 1; 
+    int look_cit = cit1;
 
-    for(int ___ = 0;___<9999;___++){
+    for(int cacavar = 0;cacavar<9999;cacavar++){
         for(int i = 0;i<game_info->board->size;i++){
-            if( (val[i] > val[look_cit]  )  && P[i] == -1 ){
+            if( P[i] == -1 && (val[i] < val[look_cit] + game_info->board->M[i][look_cit].value ) && (game_info->board->M[i][look_cit].length > 0) && (game_info->board->M[i][look_cit].owner >= 0)){
+                // if(i == 0) exit(EXIT_SUCCESS);
                 prev[i] = look_cit; 
                 step[i] = step[prev[i]] + 1;  
-                val[i] = val[look_cit] + game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
+                val[i] = val[look_cit] - game_info->board->M[i][look_cit].value - WEIGHT_TRACK_DISTANCE_FROM_START * step[i] ;
             } 
 
         } 
@@ -210,26 +212,52 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
 
 
         // Tant qu'il existe un sommet hors de P version jsp quoi
+        sort = 0;
+        int ind_min = -1;
         for(int i = 0; i<game_info->board->size;i++){
-            if(P[i] == -1){
-                look_cit = i;
-                continue;
+            if(P[i] == -1 && prev[i] != -1 ){
+                sort = 1;
+                if(ind_min == -1 || (game_info->board->M[look_cit][i].value > game_info->board->M[look_cit][ind_min].value && (game_info->board->M[i][look_cit].length > 0) && (game_info->board->M[i][look_cit].owner >= 0))  ) {
+                    ind_min = i;
+                }
             } 
         } 
-        break;
+        if(sort == 0) {
+            break;
+        }else {
+            P[ind_min] = 1;
+            look_cit = ind_min;
+        }
     } 
-
     
     maj_value(game_info);
     maj_value_card(game_info);
     int curr_upd = cit2;
-    for(int ___ = 0;___<9999;___++){
-        if(curr_upd == cit1){
+    // printf("OBJ : %d -> %d",cit1,cit2);
+    // for(int i = 0;i<game_info->board->size;i++) printf("//%d : %d//",i,prev[i]);
+    printf("\n");
+    for(int cacavar = 0;cacavar<9999;cacavar++){
+        if(curr_upd < 0){
             break;
         } 
 
-        game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
+        if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
+        game_info->board->M[curr_upd][prev[curr_upd]].dijktra = 1;
+        // if(curr_upd >= 0 && curr_upd < game_info->board->size) {
+        //     game_info->board->M[prev[curr_upd]][curr_upd].dijktra = 1;
+
+        //     if(game_info->board->M[prev[curr_upd]][curr_upd].value != (uint32) -1 ) game_info->board->M[prev[curr_upd]][curr_upd].value += WEIGHT_DIJKTRA;
+        
+        
+        // } 
+        printf("(((%d)))-",curr_upd);
         curr_upd = prev[curr_upd]; 
 
     } 
-} 
+    // printf("\n ");
+    
+    free(val);
+    free(prev);
+    free(step);
+    free(P);
+}

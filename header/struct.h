@@ -30,6 +30,7 @@ typedef struct t_track_{
     int col1;
     int col2;
     uint32 value;
+    int dijktra;
 }t_track;
 
 typedef struct t_matrix_track_{
