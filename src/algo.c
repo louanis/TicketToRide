@@ -78,13 +78,13 @@ t_track * uint_city_to_track(t_game_info * game_info, uint32 cit){
     return &(game_info->board->M[cit&0xFFFF][cit>>16]);
 } 
 
-/*Gives us the value for 1 track targeted to the building of the dijktra*/
-uint32 track_value_dijktra(const void * e1, int mode){
+/*Gives us the value for 1 track targeted to the building of the Dijkstra*/
+uint32 track_value_Dijkstra(const void * e1, int mode){
     return score(((t_track*) e1) -> length);
 }
 
-/*Gives us the total track value after considering the dijktra*/
-uint32 track_value(t_matrix_track * matrix, t_dijktra_output * best_path){
+/*Gives us the total track value after considering the Dijkstra*/
+uint32 track_value(t_matrix_track * matrix, t_Dijkstra_output * best_path){
     return 1;
 }
 
@@ -128,8 +128,8 @@ uint32 cost_track(t_game_info * game_info, t_track * track, int dist_from_start)
     return 0;
 } 
 
-/*Dijktra*/
-void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2, int (*track_value_dijktra)(const void *, int)){
+/*Dijkstra*/
+void Dijkstra(t_matrix_track * matrix, t_Dijkstra_output * ret, int cit1, int cit2, int (*track_value_Dijkstra)(const void *, int)){
     int * track_value_arr = (int*) malloc(matrix->nbTrack * sizeof(int));
     int * is_in_path = (int*) malloc(matrix->nbTrack*sizeof(int)); //0 no 1 yes
 
@@ -178,7 +178,7 @@ void dijktra(t_matrix_track * matrix, t_dijktra_output * ret, int cit1, int cit2
 }
 
 
-void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
+void maj_value_Dijkstra(t_game_info * game_info, int cit1, int cit2){
     uint32 * val = malloc(sizeof(int)*game_info->board->size);
     int * prev = (int *)malloc(sizeof(int)*game_info->board->size); 
     int * step = (int *)malloc(sizeof(int)*game_info->board->size); 
@@ -241,12 +241,12 @@ void maj_value_dijktra(t_game_info * game_info, int cit1, int cit2){
             break;
         } 
 
-        if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_DIJKTRA;
-        game_info->board->M[curr_upd][prev[curr_upd]].dijktra = 1;
+        if(game_info->board->M[curr_upd][prev[curr_upd]].value != (uint32) -1 ) game_info->board->M[curr_upd][prev[curr_upd]].value += WEIGHT_Dijkstra;
+        game_info->board->M[curr_upd][prev[curr_upd]].Dijkstra = 1;
         // if(curr_upd >= 0 && curr_upd < game_info->board->size) {
-        //     game_info->board->M[prev[curr_upd]][curr_upd].dijktra = 1;
+        //     game_info->board->M[prev[curr_upd]][curr_upd].Dijkstra = 1;
 
-        //     if(game_info->board->M[prev[curr_upd]][curr_upd].value != (uint32) -1 ) game_info->board->M[prev[curr_upd]][curr_upd].value += WEIGHT_DIJKTRA;
+        //     if(game_info->board->M[prev[curr_upd]][curr_upd].value != (uint32) -1 ) game_info->board->M[prev[curr_upd]][curr_upd].value += WEIGHT_Dijkstra;
         
         
         // } 

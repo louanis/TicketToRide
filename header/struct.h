@@ -19,10 +19,10 @@ typedef struct t_matrix_{
     int size;
 }t_matrix;
 
-typedef struct t_dijktra_output_{
+typedef struct t_Dijkstra_output_{
     int * listeDistance;
     int * listeEtapePrec;
-}t_dijktra_output;
+}t_Dijkstra_output;
 
 typedef struct t_track_{
     int length;
@@ -30,7 +30,7 @@ typedef struct t_track_{
     int col1;
     int col2;
     uint32 value;
-    int dijktra;
+    int Dijkstra;
 }t_track;
 
 typedef struct t_matrix_track_{
