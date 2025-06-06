@@ -53,12 +53,12 @@ int main(int argc,char** argv){
     FILE * f;
 
     GameData Gdat;
-    
+    char tourn[256];
     if(versus == 1){
         actionResult = sendGameSettings("", &Gdat);
 
     } else if(lobby == 1) {
-        char tourn[256]; 
+         
         boucle = -2;
         if(lobbyString != NULL){
             snprintf(tourn, sizeof(tourn), "TOURNAMENT %s", lobbyString);
@@ -131,6 +131,7 @@ int main(int argc,char** argv){
         if(versus == 1){
             actionResult = sendGameSettings("", &Gdat);
         } else if(lobby == 1) {
+            actionResult = sendGameSettings(tourn, &Gdat);
             
         } else if(versus == 0 && lobby == 0){
             actionResult = sendGameSettings("TRAINING NICE_BOT delay=0", &Gdat); //PLAY_RANDOM NICE_BOT
