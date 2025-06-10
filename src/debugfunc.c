@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "../header/all.h"
 
+
+// USELESS TRASH
+
 void is_all_good(ResultCode actionResult){
     
     if(actionResult == ALL_GOOD){

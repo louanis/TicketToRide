@@ -6,6 +6,8 @@
 
 #ifdef VERSION_1
 
+// USELESS TRASH
+
 
 void manual_loop(t_game_info * game_info){
 

@@ -112,7 +112,9 @@ int main(int argc,char** argv){
         }
         for(int i = 0;i<10;i++){
             gameInfo->myCards[i] = 0;
+            gameInfo->availableCardsMajoration[i] = 12;
         } 
+        gameInfo->availableCardsMajoration[9] = 14;
         for(int i = 0;i<4;i++){
             gameInfo->myCards[Gdat.cards[i]]++; 
         }

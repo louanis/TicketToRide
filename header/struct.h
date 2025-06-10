@@ -63,7 +63,7 @@ typedef struct t_game_info_{
     int myCards[10]; //The cards will be set to 0 and the 0th element will stay 0 forever to not burden myself with verification of color index later on
     int maxSizeCol[10]; //For each color there will be the size of the biggest track of that color
     int cardToPick[10]; //Do i need to pick this card currently ? 1 yes 0 no 2 ignore 
-    int availableCardsMajoration[10];
+    int availableCardsMajoration[10]; // Was supposed to be used for statistic but i abandoned it bcause useless
     uint32 chosenCol; //The color i chose to focus on, if &(1<<x) >0 then i am focusing on the x color
     int wagons[2]; //wagons[0] my wagons, wagons[1] opp wagons,  
     t_matrix_track * board;
