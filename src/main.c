@@ -8,14 +8,15 @@
 
 int main(int argc,char** argv){
 
-    /*UTILISATION ARGC ARGV*/
+    /* Parse command-line arguments */
     char *activeWord = NULL; // To store the word after --active
-    int activeInt = -1;       // To store the integer after the word
-    int versus = 0;
-    int lobby = 0;
-    char *lobbyString = NULL; // To store the string after --lobby
-    int boucle = -1;
-    // Parse command-line arguments
+    int activeInt = -1;      // To store the integer after the word after --active
+    int versus = 0;          // Flag for versus mode
+    int lobby = 0;           // Flag for lobby mode
+    char *lobbyString = NULL;// To store the string after --lobby
+    int boucle = -1;         // Loop counter for repeated games
+
+    // Parse all command-line arguments
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--active") == 0 && i + 2 < argc) {
             activeWord = argv[i + 1]; // Save the word after --active
@@ -33,6 +34,8 @@ int main(int argc,char** argv){
             i += 1; // Skip the next argument
         }
     } 
+
+    // Print parsed arguments for debugging
     if (activeWord != NULL) {
         printf("Active Word: %s\n", activeWord);
         printf("Active Int: %d\n", activeInt);
@@ -41,19 +44,20 @@ int main(int argc,char** argv){
         printf("Lobby String: %s\n", lobbyString);
     }
 
-
-
-
-
+    // Set debug level
     extern int DEBUG_LEVEL;
     DEBUG_LEVEL = INTERN_DEBUG;
 
+    // Connect to the game server
     ResultCode actionResult;
     actionResult = connectToCGS(ADDR_SERVER, PORT_SERVER,"QuoicouTrain");
     FILE * f;
 
+    // Game data and tournament string
     GameData Gdat;
     char tourn[256];
+
+    // Send game settings depending on mode (versus, lobby, or training)
     if(versus == 1){
         actionResult = sendGameSettings("", &Gdat);
 
@@ -71,18 +75,19 @@ int main(int argc,char** argv){
         f = fopen("./data/vsNiceBot.txt","a");
     }
     
+    // Print the board state for debugging
     actionResult = printBoard();
     printf("%d",actionResult);
 
-    // print_board_data(Gdat);
-
+    // Allocate and initialize the main game info structure
     t_game_info * gameInfo = (t_game_info *)malloc(sizeof(t_game_info));
 
-
+    // Main game loop: repeat games as needed (for training, tournaments, etc.)
     while(boucle >= 0 || boucle == -1 || lobby == 1) {
 
     
         printf("------");
+        // Initialize the board and get the current board state
         t_matrix_track * gamestate = init_matrix_track(Gdat);
         BoardState EtatPlateau;
         getBoardState(&EtatPlateau);
@@ -120,14 +125,21 @@ int main(int argc,char** argv){
 
 
         auto_loop(gameInfo);
+
+        // Write the result to file if in training mode
         if(f != NULL){
             fprintf(f,"%d\n",gameInfo->last_result);
         } 
+        // Free the board memory
         free_matrix_track(gamestate);
         printf("Starter %d\n",Gdat.starter);
+
+        // Exit loop if only one game is to be played
         if(boucle == -1|| boucle == 0 ) break;
         printf("QUOICOUHAHAHAHAHAHHAHAHA");
         boucle -= 1;
+
+        // Reset game settings for the next game if needed
         if(versus == 1){
             actionResult = sendGameSettings("", &Gdat);
         } else if(lobby == 1) {
@@ -138,6 +150,8 @@ int main(int argc,char** argv){
         }
         
     }
+
+    // If in training mode, calculate and write winrate to file
     if(f != NULL){
         fclose(f);
         f = fopen("./data/vsNiceBot.txt","r");
@@ -162,6 +176,8 @@ int main(int argc,char** argv){
         fclose(fwr);
         fclose(f);
     } 
+
+    // Quit the game and free any allocated memory
     actionResult = quitGame();
     if(activeWord != NULL){
         free(activeWord);
